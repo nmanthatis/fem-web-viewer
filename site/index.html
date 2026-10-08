@@ -26,7 +26,15 @@
     const cases = await (await fetch('cases/index.json', { cache: 'no-store' })).json();
     el.innerHTML = '';
     if (!cases.length) el.innerHTML = '<div class="muted">No cases yet.</div>';
+    cases.sort((a, b) => ((a.group || '') === '') - ((b.group || '') === '') || (a.group || '').localeCompare(b.group || '') || a.title.localeCompare(b.title));
+    let lastGroup = null;
     for (const c of cases) {
+      const g = c.group || '';
+      if (g !== lastGroup) {
+        lastGroup = g;
+        const h = document.createElement('h2'); h.className = 'group'; h.textContent = g || 'Other';
+        if (g || cases.some(x => x.group)) el.appendChild(h);
+      }
       const a = document.createElement('a');
       a.className = 'card'; a.href = `viewer.html?case=${encodeURIComponent(c.name)}`;
       a.innerHTML = `<h3>${c.encrypted ? '🔒 ' : ''}${c.title}</h3>

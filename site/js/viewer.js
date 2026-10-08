@@ -111,8 +111,13 @@ function build() {
   geometry.setIndex(new THREE.BufferAttribute(S.indices, 1));
   geometry.setAttribute('position', new THREE.BufferAttribute(new Float32Array(n * 3), 3));
   geometry.setAttribute('color', new THREE.BufferAttribute(new Float32Array(n * 3), 3));
-  mesh = new THREE.Mesh(geometry, material); mesh.frustumCulled = false; scene.add(mesh);
-  wire = new THREE.Mesh(geometry, wireMat); wire.frustumCulled = false; wire.visible = false; scene.add(wire);
+  // one geometry group per part so parts can be hidden individually (material.visible per group)
+  const parts = m.parts && m.parts.length ? m.parts : [{ id: 0, name: 'mesh', start: 0, count: S.indices.length }];
+  const mats = [], wmats = [];
+  parts.forEach((p, k) => { geometry.addGroup(p.start, p.count, k); mats.push(material.clone()); wmats.push(wireMat.clone()); });
+  S.partMats = mats; S.wireMats = wmats;
+  mesh = new THREE.Mesh(geometry, mats); mesh.frustumCulled = false; scene.add(mesh);
+  wire = new THREE.Mesh(geometry, wmats); wire.frustumCulled = false; wire.visible = false; scene.add(wire);
 
   const [lo, hi] = m.bbox;
   const size = Math.hypot(hi[0] - lo[0], hi[1] - lo[1], hi[2] - lo[2]);
@@ -186,7 +191,7 @@ function updateClipping() {
     p.normal.set(0, 0, 0); p.normal.setComponent(k, sign); p.constant = -sign * pos;
     active.push(p);
   });
-  material.clippingPlanes = active; wireMat.clippingPlanes = active;
+  for (const mm of [...(S.partMats || []), ...(S.wireMats || [])]) mm.clippingPlanes = active;
 }
 
 // ------------------------------------------------------------------ UI wiring
@@ -215,7 +220,17 @@ function wireUI() {
   }
 
   $('wire').onchange = e => wire.visible = e.target.checked;
-  $('flat').onchange = e => { material.flatShading = e.target.checked; material.needsUpdate = true; };
+  $('flat').onchange = e => { for (const mm of S.partMats) { mm.flatShading = e.target.checked; mm.needsUpdate = true; } };
+  const partsBox = $('parts');
+  if (m.parts && m.parts.length > 1) {
+    $('partsSection').style.display = '';
+    m.parts.forEach((p, k) => {
+      const lab = document.createElement('label');
+      lab.innerHTML = `<input type="checkbox" checked> ${p.name}`;
+      lab.querySelector('input').onchange = e => { S.partMats[k].visible = e.target.checked; S.wireMats[k].visible = e.target.checked; };
+      partsBox.appendChild(lab);
+    });
+  }
   $('axes').onchange = e => axes.visible = e.target.checked;
   $('reset').onclick = resetView;
   $('shot').onclick = () => {
@@ -253,6 +268,10 @@ function applyUrlParams() {
     S.clip[ax] = { on: true, flip: v < 0, v: Math.abs(v) }; $('clip' + ax).checked = true; $('clip' + ax + 'v').value = Math.abs(v);
   }
   updateClipping();
+  const hide = (params.get('hide') || '').split(',').filter(Boolean).map(Number);
+  if (hide.length && S.meta.parts) S.meta.parts.forEach((p, k) => {
+    if (hide.includes(p.id)) { S.partMats[k].visible = S.wireMats[k].visible = false; const cb = $('parts').querySelectorAll('input')[k]; if (cb) cb.checked = false; }
+  });
   const fr = parseInt(params.get('frame')); if (isFinite(fr)) setFrame(fr);
 }
 

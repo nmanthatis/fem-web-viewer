@@ -27,6 +27,7 @@ input[type=range] { width: 100%; accent-color: var(--accent); }
 /* ---------- gallery ---------- */
 .gallery { max-width: 1000px; margin: 0 auto; padding: 32px 16px; }
 .gallery h1 { margin: 0 0 4px; font-size: 24px; }
+.cards h2.group { grid-column: 1 / -1; margin: 18px 0 0; font-size: 15px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); border-bottom: 1px solid var(--border); padding-bottom: 6px; }
 .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 14px; margin-top: 20px; }
 .card { background: var(--panel); border: 1px solid var(--border); border-radius: var(--radius);
   padding: 16px; display: flex; flex-direction: column; gap: 8px; transition: border-color .15s; }
@@ -77,3 +78,5 @@ input[type=range] { width: 100%; accent-color: var(--accent); }
   .timeline .t { min-width: 0; }
 }
 .viewer.static .panel { bottom: 12px; }
+.parts { display: flex; flex-direction: column; gap: 2px; }
+.parts label { cursor: pointer; }

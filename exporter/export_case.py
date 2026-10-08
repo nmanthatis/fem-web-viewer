@@ -12,11 +12,16 @@ data.bin (little endian, byte offsets recorded in meta.json["offsets"]):
 Usage examples:
     export_case.py runs/valve.pvd --name valve --title "Valve, uniform material"
     export_case.py "viz/frame_*.vtp" --name test --fields stress,displacement --decimate 0.5
-    export_case.py runs/valve.pvd --name valve --stride 2 --encrypt
+    export_case.py runs/valve.pvd --name valve --frames 60 --encrypt
+    export_case.py "runs/model.*.vtk" --name biv --parts 0,1,2,6 --part-names "6=RV wall" --group "Clip in RV"
+
+Frames are resampled EVENLY IN SOLUTION TIME (project rule, see CLAUDE.md); pass
+--raw-steps only when you really want the solver's adaptive steps.
 """
 import argparse
 import glob
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -43,11 +48,29 @@ def load_frames(src: str):
 
         return times, loader
 
-    files = sorted(glob.glob(src)) if any(c in src for c in "*?[") else [src]
+    files = sorted(glob.glob(src), key=_natural) if any(c in src for c in "*?[") else [src]
     if not files:
         sys.exit(f"no files match {src!r}")
-    times = list(range(len(files)))
+    times = [_file_time(f, i) for i, f in enumerate(files)]
     return times, lambda i: _combine(pv.read(files[i]))
+
+
+def _natural(path):
+    """model.10.vtk sorts after model.9.vtk, not after model.1.vtk."""
+    return [int(t) if t.isdigit() else t for t in re.split(r"(\d+)", path)]
+
+
+def _file_time(path, fallback):
+    """FEBio's legacy VTK export stores the solution time in the header title line ('time 0.1234')."""
+    try:
+        with open(path, "rb") as fh:
+            fh.readline()
+            m = re.match(rb"\s*time\s+([-+0-9.eE]+)", fh.readline())
+            if m:
+                return float(m.group(1))
+    except OSError:
+        pass
+    return float(fallback)
 
 
 def _combine(ds):
@@ -57,8 +80,11 @@ def _combine(ds):
 
 
 # ---------------------------------------------------------------- surface
-def to_surface(ds):
+def to_surface(ds, parts=None):
     """Triangulated outer surface with vtkOriginalPointIds/CellIds attached."""
+    if parts is not None and "part_id" in ds.cell_data:
+        keep = np.isin(np.asarray(ds.cell_data["part_id"]), parts)
+        ds = ds.extract_cells(np.flatnonzero(keep))
     surf = ds.extract_surface(pass_pointid=True, pass_cellid=True, algorithm="dataset_surface")
     return surf.triangulate()
 
@@ -108,6 +134,10 @@ def field_arrays(surf, name, assoc, components):
         vm = np.sqrt(0.5 * ((xx - yy) ** 2 + (yy - zz) ** 2 + (zz - xx) ** 2) + 3 * (xy**2 + yz**2 + xz**2))
         yield f"{name}|vm", vm.astype(np.float32)
         yield f"{name}|trace", (xx + yy + zz).astype(np.float32)
+        sym = np.empty((len(xx), 3, 3), np.float32)
+        sym[:, 0, 0], sym[:, 1, 1], sym[:, 2, 2] = xx, yy, zz
+        sym[:, 0, 1] = sym[:, 1, 0] = xy; sym[:, 1, 2] = sym[:, 2, 1] = yz; sym[:, 0, 2] = sym[:, 2, 0] = xz
+        yield f"{name}|p1", np.linalg.eigvalsh(sym)[:, 2].astype(np.float32)  # max principal
         if components:
             for lab, comp in zip(("xx", "yy", "zz", "xy", "yz", "xz"), (xx, yy, zz, xy, yz, xz)):
                 yield f"{name}|{lab}", comp.astype(np.float32)
@@ -126,8 +156,15 @@ def main():
     ap.add_argument("--fields", help="comma-separated arrays to export (default: all)")
     ap.add_argument("--components", action="store_true", help="also export vector/tensor components")
     ap.add_argument("--decimate", type=float, default=0.0, help="fraction of triangles to remove, 0-1")
-    ap.add_argument("--stride", type=int, default=1, help="keep every k-th frame")
+    ap.add_argument("--stride", type=int, default=1, help="keep every k-th solver frame (only with --raw-steps)")
     ap.add_argument("--max-frames", type=int, default=0)
+    ap.add_argument("--frames", type=int, default=40,
+                    help="number of output frames, evenly spaced in solution time (linear interpolation between solver steps)")
+    ap.add_argument("--raw-steps", action="store_true",
+                    help="export the solver's own (adaptive, non-uniform) steps instead of resampling linearly in time")
+    ap.add_argument("--parts", help="comma-separated part_id values to keep (default: all)")
+    ap.add_argument("--part-names", help="labels for parts, e.g. '0=anterior leaflet,6=RV wall'")
+    ap.add_argument("--group", default="", help="gallery section this case is listed under")
     ap.add_argument("--encrypt", action="store_true", help="AES-GCM encrypt data.bin")
     ap.add_argument("--passphrase", help="use this passphrase instead of a random one")
     ap.add_argument("--site", default=str(SITE), help="site directory (default ../site)")
@@ -135,15 +172,42 @@ def main():
     args = ap.parse_args()
 
     times, load = load_frames(args.src)
-    idx = list(range(0, len(times), args.stride))
-    if args.max_frames:
-        idx = idx[: args.max_frames]
-    print(f"{len(times)} frames found, exporting {len(idx)}")
+    if args.raw_steps or len(times) < 3:
+        idx = list(range(0, len(times), args.stride))
+        if args.max_frames:
+            idx = idx[: args.max_frames]
+        plan = [(i, i, 0.0, times[i]) for i in idx]  # (frame a, frame b, weight of b, time)
+    else:
+        # Project rule: output frames are uniform in solution time. Solver steps are adaptive
+        # (dense where convergence is hard), so each output time is linearly interpolated
+        # between the two bracketing steps.
+        t = np.asarray(times, float)
+        targets = np.linspace(t[0], t[-1], args.frames)
+        plan = []
+        for tt in targets:
+            b = int(np.clip(np.searchsorted(t, tt, side="right"), 1, len(t) - 1))
+            a = b - 1
+            w = 0.0 if t[b] == t[a] else float((tt - t[a]) / (t[b] - t[a]))
+            plan.append((a, b, w, float(tt)))
+    print(f"{len(times)} solver frames found (t = {times[0]:g} .. {times[-1]:g}), exporting {len(plan)}"
+          + ("" if args.raw_steps else " evenly spaced in time"))
+    idx = [a for a, _, _, _ in plan]
+
+    parts = [int(x) for x in args.parts.split(",")] if args.parts else None
+    cache = {}
+
+    def surface(i):
+        if i not in cache:
+            if len(cache) > 2:
+                cache.pop(min(cache))
+            cache[i] = to_surface(load(i), parts)
+        return cache[i]
 
     # --- frame 0 defines topology ------------------------------------------
-    surf0 = to_surface(load(idx[0]))
+    surf0 = surface(plan[0][0])
     n_full = surf0.n_points
     fields = pick_fields(surf0, args.fields.split(",") if args.fields else None)
+    fields.pop("part_id", None)
     print(f"surface: {n_full} points, {surf0.n_cells} triangles; fields: {fields}")
 
     if args.decimate > 0:
@@ -151,25 +215,57 @@ def main():
         # decimate_pro keeps a subset of the original vertices -> map back by nearest point
         sel = np.asarray([surf0.find_closest_point(p) for p in dec.points], dtype=np.int64)
         faces = dec.faces.reshape(-1, 4)[:, 1:]
+        tri_part = None
         print(f"decimated to {dec.n_points} points, {dec.n_cells} triangles")
     else:
         sel = np.arange(n_full)
         faces = surf0.faces.reshape(-1, 4)[:, 1:]
+        tri_part = np.asarray(surf0.cell_data["part_id"]) if "part_id" in surf0.cell_data else None
+
+    # triangles grouped by part so the viewer can toggle parts (three.js geometry groups)
+    part_meta = []
+    if tri_part is not None:
+        order = np.argsort(tri_part, kind="stable")
+        faces, tri_part = faces[order], tri_part[order]
+        names = dict(kv.split("=", 1) for kv in args.part_names.split(",")) if args.part_names else {}
+        for pid in np.unique(tri_part):
+            where = np.flatnonzero(tri_part == pid)
+            part_meta.append({"id": int(pid), "name": names.get(str(pid), f"part {pid}"),
+                              "start": int(where[0]) * 3, "count": int(len(where)) * 3})
     n_verts = len(sel)
     indices = faces.astype(np.uint32).reshape(-1)
 
     # --- gather frames ------------------------------------------------------
-    n_frames = len(idx)
+    n_frames = len(plan)
     positions = np.empty((n_frames, n_verts, 3), np.float32)
     field_data = {}  # export name -> (n_frames, n_verts)
-    for fi, frame in enumerate(idx):
-        surf = surf0 if fi == 0 else to_surface(load(frame))
-        if surf.n_points != n_full:
-            sys.exit(f"frame {frame}: surface has {surf.n_points} points, expected {n_full} (topology changed?)")
-        positions[fi] = surf.points[sel]
-        for name, assoc in fields.items():
-            for ename, arr in field_arrays(surf, name, assoc, args.components):
-                field_data.setdefault(ename, np.empty((n_frames, n_verts), np.float32))[fi] = arr[sel]
+    sampled = {}  # solver frame -> (positions, {field: values}) already reduced to sel
+
+    def sample(frame):
+        if frame not in sampled:
+            if len(sampled) > 2:
+                sampled.pop(min(sampled))
+            surf = surface(frame)
+            if surf.n_points != n_full:
+                sys.exit(f"frame {frame}: surface has {surf.n_points} points, expected {n_full} (topology changed?)")
+            vals = {}
+            for name, assoc in fields.items():
+                for ename, arr in field_arrays(surf, name, assoc, args.components):
+                    vals[ename] = arr[sel]
+            sampled[frame] = (np.asarray(surf.points[sel], np.float32), vals)
+        return sampled[frame]
+
+    for fi, (a, b, w, _) in enumerate(plan):
+        pa, va = sample(a)
+        if w > 0:
+            pb, vb = sample(b)
+            positions[fi] = (1 - w) * pa + w * pb
+            for ename in va:
+                field_data.setdefault(ename, np.empty((n_frames, n_verts), np.float32))[fi] = (1 - w) * va[ename] + w * vb[ename]
+        else:
+            positions[fi] = pa
+            for ename in va:
+                field_data.setdefault(ename, np.empty((n_frames, n_verts), np.float32))[fi] = va[ename]
         print(f"\r  frame {fi + 1}/{n_frames}", end="", flush=True)
     print()
 
@@ -207,7 +303,9 @@ def main():
         "nFrames": n_frames,
         "nVerts": n_verts,
         "nTris": len(indices) // 3,
-        "times": [float(times[i]) for i in idx],
+        "times": [t for _, _, _, t in plan],
+        "linearTime": not args.raw_steps,
+        "parts": part_meta,
         "fields": field_meta,
         "bbox": [lo.tolist(), hi.tolist()],
         "offsets": offsets,
@@ -239,6 +337,7 @@ def main():
         "name": args.name,
         "title": meta["title"],
         "description": args.description,
+        "group": args.group,
         "nFrames": n_frames,
         "nVerts": n_verts,
         "nTris": meta["nTris"],
@@ -246,7 +345,7 @@ def main():
         "encrypted": bool(args.encrypt),
         "sizeMB": round(len(data) / 1e6, 1),
     })
-    index.sort(key=lambda c: c["title"].lower())
+    index.sort(key=lambda c: (c.get("group", ""), c["title"].lower()))
     index_path.write_text(json.dumps(index, indent=1))
 
     mb = len(data) / 1e6

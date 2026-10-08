@@ -3,26 +3,19 @@
   "name": "sphere_demo",
   "title": "Demo: deforming sphere",
   "description": "Synthetic 20-frame test",
-  "nFrames": 20,
+  "group": "",
+  "nFrames": 24,
   "nVerts": 641,
   "nTris": 1386,
   "fields": [
    "displacement|mag",
-   "displacement|x",
-   "displacement|y",
-   "displacement|z",
    "pressure",
    "stress|vm",
    "stress|trace",
-   "stress|xx",
-   "stress|yy",
-   "stress|zz",
-   "stress|xy",
-   "stress|yz",
-   "stress|xz"
+   "stress|p1"
   ],
   "encrypted": false,
-  "sizeMB": 0.8
+  "sizeMB": 0.5
  },
  {
   "name": "sphere_demo_dec",
@@ -56,5 +49,24 @@
   ],
   "encrypted": true,
   "sizeMB": 0.1
+ },
+ {
+  "name": "clip_rv4mmHg",
+  "title": "Diseased valve + clip in BiV, RV 4 mmHg",
+  "description": "Run 01_clip_rv4mmHg: A1S2 clip, annulus tied to the 3 mm diseased wall, RV + trunk pressurized to 4 mmHg (t = 0.16\u20130.21 s).",
+  "group": "Clip in RV",
+  "nFrames": 40,
+  "nVerts": 23137,
+  "nTris": 45378,
+  "fields": [
+   "stress|vm",
+   "stress|trace",
+   "stress|p1",
+   "Lagrange_strain|vm",
+   "Lagrange_strain|trace",
+   "Lagrange_strain|p1"
+  ],
+  "encrypted": true,
+  "sizeMB": 33.9
  }
 ]

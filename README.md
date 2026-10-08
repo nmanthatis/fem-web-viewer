@@ -22,8 +22,9 @@ you want baked in (e.g. Extract Surface, Clip, Threshold), select the pipeline o
 pick *Point Data / Cell Data* arrays you want to keep. ParaView writes `name.pvd` plus
 `name/name_0.vtu …`.
 
-Alternatives: a glob of per-frame files works too (`"runs/frame_*.vtu"`), as does a
-single file for a static result.
+Alternatives: a glob of per-frame files works too (`"runs/model.*.vtk"` — FEBio's own
+legacy-VTK export, time read from the header line; natural sort order), as does a single
+file for a static result.
 
 ## 2. Build the web bundle
 
@@ -35,9 +36,12 @@ python3 exporter/export_case.py runs/valve.pvd --name valve_uniform \
 
 | flag | meaning |
 |---|---|
-| `--fields a,b` | arrays to export (default: all point+cell arrays). Vectors → magnitude, symmetric tensors → von Mises + trace; add `--components` for x/y/z or xx…xz |
+| `--fields a,b` | arrays to export (default: all point+cell arrays). Vectors → magnitude, tensors → von Mises + trace + max principal (`p1`); add `--components` for x/y/z or xx…xz |
 | `--decimate 0.5` | remove 50 % of surface triangles (keeps original vertices, so all frames stay consistent) |
-| `--stride 2` / `--max-frames N` | keep every 2nd frame / cap the frame count |
+| `--frames 40` | number of output frames, **evenly spaced in solution time** (default; linear interpolation between solver steps — project rule, see CLAUDE.md) |
+| `--raw-steps [--stride k]` | export the solver's own adaptive steps instead (not for publishing) |
+| `--parts 0,1,6` / `--part-names "6=RV wall"` | keep only these `part_id`s / label them; parts become toggles in the viewer |
+| `--group "Clip in RV"` | section heading the case is listed under in the gallery |
 | `--encrypt [--passphrase ...]` | AES-GCM-encrypt the data; a random passphrase is printed once |
 | `--base-url https://nmanthatis.github.io/fem-web-viewer` | makes the printed share link correct |
 
@@ -65,7 +69,8 @@ GitHub repo settings → Pages → Source = **GitHub Actions**. Every later push
 - If your GitHub org has Team/Enterprise, you can instead make the repo private and
   enable Pages access control — then encryption is optional.
 
-Useful URL parameters: `&field=stress|vm&cmap=coolwarm&frame=12&clipX=0.4&clipZ=-0.5&autoplay=0`
+Useful URL parameters: `&field=stress|vm&cmap=coolwarm&frame=12&clipX=0.4&clipZ=-0.5&hide=6&autoplay=0`
+(`hide=` takes part ids)
 (negative clip = flipped side). Copy the browser URL to share a specific view.
 
 ## Viewer controls
