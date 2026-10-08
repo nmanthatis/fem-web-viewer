@@ -39,7 +39,7 @@ python3 exporter/export_case.py runs/valve.pvd --name valve_uniform \
 | `--decimate 0.5` | remove 50 % of surface triangles (keeps original vertices, so all frames stay consistent) |
 | `--stride 2` / `--max-frames N` | keep every 2nd frame / cap the frame count |
 | `--encrypt [--passphrase ...]` | AES-GCM-encrypt the data; a random passphrase is printed once |
-| `--base-url https://you.github.io/fem-web-viewer` | makes the printed share link correct |
+| `--base-url https://nmanthatis.github.io/fem-web-viewer` | makes the printed share link correct |
 
 Only the **outer surface** is exported (the viewer is a surface renderer); clip planes
 show the hollow inside. Topology must be constant across frames (always true for
