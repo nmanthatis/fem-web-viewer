@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FEM Viewer</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Ccircle cx=%278%27 cy=%278%27 r=%277%27 fill=%27%235aa9ff%27/%3E%3C/svg%3E">
+<script>
+  try { const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+</script>
+</head>
+<body>
+<main class="gallery">
+  <div class="row" style="justify-content:space-between">
+    <div><h1>FEM simulation viewer</h1><div class="muted">Interactive 3D animations of finite-element results. Click a case to open it.</div></div>
+    <button id="theme" style="flex:0 0 auto">Theme</button>
+  </div>
+  <div id="cards" class="cards"><div class="muted">Loading…</div></div>
+</main>
+<script type="module">
+  const SUFFIX = { mag: 'magnitude', vm: 'von Mises', trace: 'trace' };
+  const prettyField = f => { const [n, c] = f.split('|'); return c ? `${n} (${SUFFIX[c] || c})` : n; };
+  const el = document.getElementById('cards');
+  try {
+    const cases = await (await fetch('cases/index.json', { cache: 'no-store' })).json();
+    el.innerHTML = '';
+    if (!cases.length) el.innerHTML = '<div class="muted">No cases yet.</div>';
+    for (const c of cases) {
+      const a = document.createElement('a');
+      a.className = 'card'; a.href = `viewer.html?case=${encodeURIComponent(c.name)}`;
+      a.innerHTML = `<h3>${c.encrypted ? '🔒 ' : ''}${c.title}</h3>
+        ${c.description ? `<div class="muted">${c.description}</div>` : ''}
+        <div class="chips">${c.fields.map(f => `<span class="chip">${prettyField(f)}</span>`).join('')}</div>
+        <div class="meta">${c.nFrames} frame${c.nFrames === 1 ? '' : 's'} · ${c.nVerts.toLocaleString()} vertices · ${c.nTris.toLocaleString()} triangles · ${c.sizeMB} MB${c.encrypted ? ' · passphrase required' : ''}</div>`;
+      el.appendChild(a);
+    }
+  } catch (e) { el.innerHTML = `<div class="error">Could not load cases/index.json (${e.message})</div>`; }
+  document.getElementById('theme').onclick = () => {
+    const r = document.documentElement; const next = r.dataset.theme === 'light' ? 'dark' : 'light';
+    r.dataset.theme = next; try { localStorage.setItem('theme', next); } catch (e) {}
+  };
+</script>
+</body>
+</html>

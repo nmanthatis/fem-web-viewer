@@ -1,0 +1,60 @@
+[
+ {
+  "name": "sphere_demo",
+  "title": "Demo: deforming sphere",
+  "description": "Synthetic 20-frame test",
+  "nFrames": 20,
+  "nVerts": 641,
+  "nTris": 1386,
+  "fields": [
+   "displacement|mag",
+   "displacement|x",
+   "displacement|y",
+   "displacement|z",
+   "pressure",
+   "stress|vm",
+   "stress|trace",
+   "stress|xx",
+   "stress|yy",
+   "stress|zz",
+   "stress|xy",
+   "stress|yz",
+   "stress|xz"
+  ],
+  "encrypted": false,
+  "sizeMB": 0.8
+ },
+ {
+  "name": "sphere_demo_dec",
+  "title": "Demo: sphere decimated 60%",
+  "description": "",
+  "nFrames": 10,
+  "nVerts": 225,
+  "nTris": 554,
+  "fields": [
+   "pressure",
+   "displacement|mag"
+  ],
+  "encrypted": false,
+  "sizeMB": 0.1
+ },
+ {
+  "name": "leaflet_frame40",
+  "title": "Leaflet frame 40 (single frame)",
+  "description": "",
+  "nFrames": 1,
+  "nVerts": 2000,
+  "nTris": 3798,
+  "fields": [
+   "displacement|mag",
+   "shell_thickness",
+   "part_id",
+   "stress|vm",
+   "stress|trace",
+   "Lagrange_strain|vm",
+   "Lagrange_strain|trace"
+  ],
+  "encrypted": true,
+  "sizeMB": 0.1
+ }
+]

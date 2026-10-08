@@ -1,0 +1,10 @@
+.venv/
+__pycache__/
+test_data/
+*.pyc
+# large plain bundles are committed on purpose (site/cases); keep raw sims out
+*.xplt
+*.odb
+*.vtu
+*.vtp
+*.pvd

@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FEM Viewer</title>
+<link rel="stylesheet" href="style.css">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Ccircle cx=%278%27 cy=%278%27 r=%277%27 fill=%27%235aa9ff%27/%3E%3C/svg%3E">
+<script>
+  try { const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
+</script>
+<script type="importmap">
+{ "imports": {
+  "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js",
+  "three/addons/": "https://cdn.jsdelivr.net/npm/three@0.170.0/examples/jsm/"
+} }
+</script>
+</head>
+<body>
+<div class="viewer">
+  <canvas id="canvas"></canvas>
+
+  <button id="toggle-panel" title="Show controls">☰</button>
+  <aside class="panel" id="panel">
+    <button class="close" id="close-panel" title="Hide controls">✕</button>
+    <div>
+      <a href="index.html" class="muted" style="font-size:12px">← all cases</a>
+      <h1 id="title">…</h1>
+      <div id="desc" class="muted" style="font-size:12px"></div>
+      <div id="stats" class="muted" style="font-size:12px"></div>
+    </div>
+
+    <section>
+      <h2>Color by</h2>
+      <select id="field"></select>
+      <div class="row"><label>Colormap</label><select id="cmap"></select></div>
+      <div class="row"><label>Range</label>
+        <select id="rangeMode"><option value="global">all frames</option><option value="frame">current frame</option><option value="custom">custom</option></select></div>
+      <div class="row" id="customRange" style="display:none">
+        <input type="number" id="rmin" step="any" placeholder="min"><input type="number" id="rmax" step="any" placeholder="max">
+      </div>
+    </section>
+
+    <section>
+      <h2>Clipping</h2>
+      <div class="clip-row"><label><input type="checkbox" id="clipX"> X</label><input type="range" id="clipXv" min="0" max="1" step="0.001" value="0.5"><button id="clipXf" title="flip side">⇄</button></div>
+      <div class="clip-row"><label><input type="checkbox" id="clipY"> Y</label><input type="range" id="clipYv" min="0" max="1" step="0.001" value="0.5"><button id="clipYf" title="flip side">⇄</button></div>
+      <div class="clip-row"><label><input type="checkbox" id="clipZ"> Z</label><input type="range" id="clipZv" min="0" max="1" step="0.001" value="0.5"><button id="clipZf" title="flip side">⇄</button></div>
+    </section>
+
+    <section>
+      <h2>Display</h2>
+      <div class="row">
+        <label><input type="checkbox" id="wire"> wireframe</label>
+        <label><input type="checkbox" id="flat"> flat shading</label>
+      </div>
+      <div class="row">
+        <label><input type="checkbox" id="edges"> edges</label>
+        <label><input type="checkbox" id="axes"> axes</label>
+      </div>
+      <div class="row"><label>Playback fps</label><input type="number" id="fps" min="1" max="60" value="12" step="1"></div>
+      <div class="row"><button id="reset">Reset view</button><button id="shot">Screenshot</button></div>
+      <div class="row"><button id="theme">Theme</button><button id="share">Copy link</button></div>
+      <div class="muted" style="font-size:11px">Drag: rotate · right-drag / two fingers: pan · wheel/pinch: zoom · Space: play · ←/→: step</div>
+    </section>
+  </aside>
+
+  <div class="legend" id="legend" style="display:none">
+    <div id="legendName"></div>
+    <canvas id="legendBar" width="256" height="12"></canvas>
+    <div class="lbl"><span id="legendMin"></span><span id="legendMax"></span></div>
+  </div>
+
+  <div class="timeline" id="timeline">
+    <button id="play" class="primary" title="play/pause (space)">▶</button>
+    <button id="prev" title="previous frame">◀</button>
+    <button id="next" title="next frame">▶|</button>
+    <input type="range" id="frame" min="0" max="0" step="1" value="0">
+    <div class="t" id="tlabel">—</div>
+  </div>
+
+  <div class="overlay" id="overlay">
+    <div class="box">
+      <div id="ovTitle"><b>Loading…</b></div>
+      <div class="bar"><div id="ovBar"></div></div>
+      <div id="ovMsg" class="muted"></div>
+      <form id="keyForm" style="display:none; gap:8px; flex-direction:column">
+        <label>This case is encrypted. Enter the passphrase you were given:</label>
+        <input type="password" id="keyInput" autocomplete="off" autofocus>
+        <button class="primary" type="submit">Open</button>
+      </form>
+    </div>
+  </div>
+</div>
+<script type="module" src="js/viewer.js"></script>
+</body>
+</html>

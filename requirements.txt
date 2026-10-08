@@ -1,0 +1,3 @@
+pyvista>=0.44
+numpy
+cryptography
