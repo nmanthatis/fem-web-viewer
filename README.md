@@ -72,7 +72,7 @@ Useful URL parameters: `&field=stress|vm&cmap=coolwarm&frame=12&clipX=0.4&clipZ=
 
 Drag rotate (trackball, no pole limit) · right-drag/two-finger pan · wheel/pinch zoom ·
 Space play/pause · ←/→ step · `r` reset view. Panel: field + colormap + range (all frames /
-current frame / custom), X/Y/Z clip planes, wireframe, flat shading, axes, screenshot (PNG).
+current frame / custom), X/Y/Z clip planes, wireframe, flat shading, axes, screenshot (PNG with transparent background).
 Light/dark theme follows the toggle on the gallery page.
 
 ## Development notes

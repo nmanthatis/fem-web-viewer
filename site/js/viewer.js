@@ -17,7 +17,7 @@ const S = {
 
 // ------------------------------------------------------------------ three.js setup
 const canvas = $('canvas');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 renderer.localClippingEnabled = true;
 const scene = new THREE.Scene();
@@ -219,8 +219,11 @@ function wireUI() {
   $('axes').onchange = e => axes.visible = e.target.checked;
   $('reset').onclick = resetView;
   $('shot').onclick = () => {
+    // render once with a transparent background so the PNG can be dropped onto slides/figures
+    const bg = scene.background; scene.background = null; renderer.setClearColor(0x000000, 0);
     renderer.render(scene, camera);
     const a = document.createElement('a'); a.download = `${m.name}_frame${S.frame + 1}.png`; a.href = canvas.toDataURL('image/png'); a.click();
+    scene.background = bg; renderer.setClearColor(0x000000, 1);
   };
 
   $('frame').oninput = e => { setPlaying(false); setFrame(+e.target.value); };
