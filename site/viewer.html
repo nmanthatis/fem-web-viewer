@@ -55,20 +55,20 @@
         <label><input type="checkbox" id="flat"> flat shading</label>
       </div>
       <div class="row">
-        <label><input type="checkbox" id="edges"> edges</label>
         <label><input type="checkbox" id="axes"> axes</label>
       </div>
       <div class="row"><label>Playback fps</label><input type="number" id="fps" min="1" max="60" value="12" step="1"></div>
       <div class="row"><button id="reset">Reset view</button><button id="shot">Screenshot</button></div>
-      <div class="row"><button id="theme">Theme</button><button id="share">Copy link</button></div>
-      <div class="muted" style="font-size:11px">Drag: rotate · right-drag / two fingers: pan · wheel/pinch: zoom · Space: play · ←/→: step</div>
+      <div class="muted" style="font-size:11px">Drag: rotate · right-drag / two fingers: pan · wheel/pinch: zoom · Space: play · ←/→: step · r: reset view</div>
     </section>
   </aside>
 
   <div class="legend" id="legend" style="display:none">
-    <div id="legendName"></div>
-    <canvas id="legendBar" width="256" height="12"></canvas>
-    <div class="lbl"><span id="legendMin"></span><span id="legendMax"></span></div>
+    <div id="legendName" class="name"></div>
+    <div class="bar">
+      <canvas id="legendBar" width="12" height="256"></canvas>
+      <div class="lbl"><span id="legendMax"></span><span id="legendMid"></span><span id="legendMin"></span></div>
+    </div>
   </div>
 
   <div class="timeline" id="timeline">

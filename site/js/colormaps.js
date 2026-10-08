@@ -22,15 +22,15 @@ export function buildLUT(name, n = 256) {
   return lut;
 }
 
-/** Draw a horizontal colorbar into a canvas. */
+/** Draw a vertical colorbar (max at top) into a canvas. */
 export function drawLegend(canvas, name) {
   const ctx = canvas.getContext('2d');
   const lut = buildLUT(name);
   const w = canvas.width, h = canvas.height;
   const img = ctx.createImageData(w, h);
-  for (let x = 0; x < w; x++) {
-    const i = Math.floor((x / (w - 1)) * 255) * 3;
-    for (let y = 0; y < h; y++) {
+  for (let y = 0; y < h; y++) {
+    const i = Math.floor((1 - y / (h - 1)) * 255) * 3;
+    for (let x = 0; x < w; x++) {
       const p = (y * w + x) * 4;
       img.data[p] = lut[i] * 255; img.data[p + 1] = lut[i + 1] * 255; img.data[p + 2] = lut[i + 2] * 255; img.data[p + 3] = 255;
     }

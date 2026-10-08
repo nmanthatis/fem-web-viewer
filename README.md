@@ -66,13 +66,14 @@ GitHub repo settings → Pages → Source = **GitHub Actions**. Every later push
   enable Pages access control — then encryption is optional.
 
 Useful URL parameters: `&field=stress|vm&cmap=coolwarm&frame=12&clipX=0.4&clipZ=-0.5&autoplay=0`
-(negative clip = flipped side). "Copy link" in the panel copies the current URL.
+(negative clip = flipped side). Copy the browser URL to share a specific view.
 
 ## Viewer controls
 
-Drag rotate · right-drag/two-finger pan · wheel/pinch zoom · Space play/pause · ←/→ step ·
-`r` reset view. Panel: field + colormap + range (all frames / current frame / custom),
-X/Y/Z clip planes, wireframe/edges/flat shading, screenshot (PNG), light/dark theme.
+Drag rotate (trackball, no pole limit) · right-drag/two-finger pan · wheel/pinch zoom ·
+Space play/pause · ←/→ step · `r` reset view. Panel: field + colormap + range (all frames /
+current frame / custom), X/Y/Z clip planes, wireframe, flat shading, axes, screenshot (PNG).
+Light/dark theme follows the toggle on the gallery page.
 
 ## Development notes
 

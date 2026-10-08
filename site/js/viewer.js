@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { TrackballControls } from 'three/addons/controls/TrackballControls.js';
 import { COLORMAPS, buildLUT, drawLegend, fmt } from './colormaps.js';
 import { decryptBundle, keyFromFragment } from './crypto.js';
 
@@ -22,8 +22,9 @@ renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 renderer.localClippingEnabled = true;
 const scene = new THREE.Scene();
 const camera = new THREE.PerspectiveCamera(40, 1, 0.01, 1e5);
-const controls = new OrbitControls(camera, canvas);
-controls.enableDamping = true; controls.dampingFactor = 0.12;
+// Trackball = free rotation in any direction (no pole limit)
+const controls = new TrackballControls(camera, canvas);
+controls.rotateSpeed = 3.0; controls.zoomSpeed = 1.2; controls.panSpeed = 0.8; controls.dynamicDampingFactor = 0.15;
 scene.add(new THREE.HemisphereLight(0xffffff, 0x667799, 0.9));
 const key = new THREE.DirectionalLight(0xffffff, 1.6); key.position.set(0.5, 0.8, 1); camera.add(key);
 scene.add(camera);
@@ -35,22 +36,20 @@ const planes = {
 };
 const material = new THREE.MeshStandardMaterial({ vertexColors: true, side: THREE.DoubleSide, roughness: 0.55, metalness: 0.05, clippingPlanes: [] });
 const wireMat = new THREE.MeshBasicMaterial({ wireframe: true, color: 0x222222, transparent: true, opacity: 0.35, clippingPlanes: [] });
-const edgeMat = new THREE.LineBasicMaterial({ color: 0x111111, transparent: true, opacity: 0.6, clippingPlanes: [] });
-let geometry, mesh, wire, edges, axes;
+let geometry, mesh, wire, axes;
 
 function applySceneTheme() {
   const css = getComputedStyle(document.documentElement);
   scene.background = new THREE.Color(css.getPropertyValue('--scene').trim());
   const light = document.documentElement.dataset.theme === 'light';
   wireMat.color.set(light ? 0x222222 : 0xdddddd);
-  edgeMat.color.set(light ? 0x111111 : 0xeeeeee);
 }
 applySceneTheme();
 
 function resize() {
   const w = canvas.clientWidth, h = canvas.clientHeight;
   if (canvas.width !== w * renderer.getPixelRatio() || canvas.height !== h * renderer.getPixelRatio()) {
-    renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix();
+    renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); controls.handleResize();
   }
 }
 
@@ -114,8 +113,6 @@ function build() {
   geometry.setAttribute('color', new THREE.BufferAttribute(new Float32Array(n * 3), 3));
   mesh = new THREE.Mesh(geometry, material); mesh.frustumCulled = false; scene.add(mesh);
   wire = new THREE.Mesh(geometry, wireMat); wire.frustumCulled = false; wire.visible = false; scene.add(wire);
-  // edges are rebuilt per frame only when visible (EdgesGeometry is not deformable)
-  edges = new THREE.LineSegments(new THREE.BufferGeometry(), edgeMat); edges.visible = false; scene.add(edges);
 
   const [lo, hi] = m.bbox;
   const size = Math.hypot(hi[0] - lo[0], hi[1] - lo[1], hi[2] - lo[2]);
@@ -130,7 +127,7 @@ function resetView() {
   const c = new THREE.Vector3((lo[0] + hi[0]) / 2, (lo[1] + hi[1]) / 2, (lo[2] + hi[2]) / 2);
   const size = Math.hypot(hi[0] - lo[0], hi[1] - lo[1], hi[2] - lo[2]);
   camera.position.copy(c).add(new THREE.Vector3(0.7, 0.5, 1).normalize().multiplyScalar(size * 1.4));
-  controls.target.copy(c); controls.update();
+  camera.up.set(0, 1, 0); controls.target.copy(c); controls.update();
 }
 
 function setFrame(i) {
@@ -139,16 +136,10 @@ function setFrame(i) {
   geometry.attributes.position.array.set(S.positions.subarray(i * n3, (i + 1) * n3));
   geometry.attributes.position.needsUpdate = true;
   geometry.computeVertexNormals();
-  if (edges.visible) rebuildEdges();
   colorize();
   $('frame').value = i;
   const t = m.times[i];
   $('tlabel').textContent = `${i + 1}/${m.nFrames}  t=${fmt(t)}`;
-}
-
-function rebuildEdges() {
-  edges.geometry.dispose();
-  edges.geometry = new THREE.EdgesGeometry(geometry, 1);
 }
 
 function currentRange() {
@@ -176,7 +167,7 @@ function colorize() {
       col[k * 3] = lut[j]; col[k * 3 + 1] = lut[j + 1]; col[k * 3 + 2] = lut[j + 2];
     }
     $('legend').style.display = ''; $('legendName').textContent = prettyField(S.field);
-    $('legendMin').textContent = fmt(lo); $('legendMax').textContent = fmt(hi);
+    $('legendMin').textContent = fmt(lo); $('legendMid').textContent = fmt((lo + hi) / 2); $('legendMax').textContent = fmt(hi);
   }
   geometry.attributes.color.needsUpdate = true;
 }
@@ -195,7 +186,7 @@ function updateClipping() {
     p.normal.set(0, 0, 0); p.normal.setComponent(k, sign); p.constant = -sign * pos;
     active.push(p);
   });
-  material.clippingPlanes = active; wireMat.clippingPlanes = active; edgeMat.clippingPlanes = active;
+  material.clippingPlanes = active; wireMat.clippingPlanes = active;
 }
 
 // ------------------------------------------------------------------ UI wiring
@@ -224,22 +215,12 @@ function wireUI() {
   }
 
   $('wire').onchange = e => wire.visible = e.target.checked;
-  $('edges').onchange = e => { edges.visible = e.target.checked; if (edges.visible) rebuildEdges(); };
   $('flat').onchange = e => { material.flatShading = e.target.checked; material.needsUpdate = true; };
   $('axes').onchange = e => axes.visible = e.target.checked;
   $('reset').onclick = resetView;
   $('shot').onclick = () => {
     renderer.render(scene, camera);
     const a = document.createElement('a'); a.download = `${m.name}_frame${S.frame + 1}.png`; a.href = canvas.toDataURL('image/png'); a.click();
-  };
-  $('theme').onclick = () => {
-    const r = document.documentElement; const next = r.dataset.theme === 'light' ? 'dark' : 'light';
-    r.dataset.theme = next; try { localStorage.setItem('theme', next); } catch (e) {}
-    applySceneTheme(); colorize();
-  };
-  $('share').onclick = async () => {
-    try { await navigator.clipboard.writeText(location.href); $('share').textContent = 'Copied!'; setTimeout(() => $('share').textContent = 'Copy link', 1500); }
-    catch (e) { prompt('Copy this link:', location.href); }
   };
 
   $('frame').oninput = e => { setPlaying(false); setFrame(+e.target.value); };
