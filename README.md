@@ -42,6 +42,7 @@ python3 exporter/export_case.py runs/valve.pvd --name valve_uniform \
 | `--raw-steps [--stride k]` | export the solver's own adaptive steps instead (not for publishing) |
 | `--parts 0,1,6` / `--part-names "6=RV wall"` | keep only these `part_id`s / label them; parts become toggles in the viewer |
 | `--group "Clip in RV"` | section heading the case is listed under in the gallery |
+| `--warp-by auto|none|NAME` | add a point vector array to the coordinates. FEBio's VTK export stores reference coordinates + `displacement`; `auto` detects this |
 | `--encrypt [--passphrase ...]` | AES-GCM-encrypt the data; a random passphrase is printed once |
 | `--base-url https://nmanthatis.github.io/fem-web-viewer` | makes the printed share link correct |
 

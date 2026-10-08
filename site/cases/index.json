@@ -35,17 +35,19 @@
   "name": "leaflet_frame40",
   "title": "Leaflet frame 40 (single frame)",
   "description": "",
+  "group": "",
   "nFrames": 1,
   "nVerts": 2000,
   "nTris": 3798,
   "fields": [
    "displacement|mag",
    "shell_thickness",
-   "part_id",
    "stress|vm",
    "stress|trace",
+   "stress|p1",
    "Lagrange_strain|vm",
-   "Lagrange_strain|trace"
+   "Lagrange_strain|trace",
+   "Lagrange_strain|p1"
   ],
   "encrypted": true,
   "sizeMB": 0.1

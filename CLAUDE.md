@@ -8,6 +8,13 @@ numerical rather than physical reasons. `exporter/export_case.py` does this by d
 (`--frames N`, linear interpolation between bracketing steps). Do **not** pass
 `--raw-steps` for anything that is published; if a user insists, say the rule first.
 
+## FEBio VTK files are reference coordinates + displacement
+FEBio's `model.N.vtk` export keeps the undeformed node positions in `POINTS` for every
+frame and stores the motion in the point array `displacement`. The exporter warps points
+by that array automatically (`--warp-by auto`); it skips warping only when `POINTS`
+already move between frames (ParaView-saved series). If a case "doesn't deform", check
+this first.
+
 ## Other conventions
 - Frame time comes from the `.pvd` or from the legacy-VTK title line (`time 0.1234`).
 - Keep bundles < 50 MB (decimate / fewer fields / fewer frames, in that order of preference).

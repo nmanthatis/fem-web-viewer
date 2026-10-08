@@ -165,6 +165,10 @@ def main():
     ap.add_argument("--parts", help="comma-separated part_id values to keep (default: all)")
     ap.add_argument("--part-names", help="labels for parts, e.g. '0=anterior leaflet,6=RV wall'")
     ap.add_argument("--group", default="", help="gallery section this case is listed under")
+    ap.add_argument("--warp-by", default="auto",
+                    help="point vector array added to the coordinates (FEBio's VTK export keeps reference "
+                         "coordinates in POINTS and puts motion in 'displacement'). 'auto' (default) uses an array "
+                         "named displacement/Displacement/u if present; 'none' disables")
     ap.add_argument("--encrypt", action="store_true", help="AES-GCM encrypt data.bin")
     ap.add_argument("--passphrase", help="use this passphrase instead of a random one")
     ap.add_argument("--site", default=str(SITE), help="site directory (default ../site)")
@@ -195,6 +199,25 @@ def main():
 
     parts = [int(x) for x in args.parts.split(",")] if args.parts else None
     cache = {}
+    warp = [None]  # resolved on the first surface
+
+    def deformed_points(surf):
+        if warp[0] is None:
+            if args.warp_by == "none":
+                warp[0] = ""
+            elif args.warp_by != "auto":
+                warp[0] = args.warp_by
+            else:
+                cands = [n for n in surf.point_data.keys() if n.lower() in ("displacement", "u", "disp")
+                         and np.asarray(surf.point_data[n]).ndim == 2 and surf.point_data[n].shape[1] == 3]
+                warp[0] = cands[0] if cands else ""
+            print(f"warping points by '{warp[0]}'" if warp[0] else "no displacement array: using POINTS as-is")
+        pts = np.asarray(surf.points, np.float32)
+        if warp[0]:
+            if warp[0] not in surf.point_data:
+                sys.exit(f"--warp-by {warp[0]!r}: array not found in point data")
+            pts = pts + np.asarray(surf.point_data[warp[0]], np.float32)
+        return pts
 
     def surface(i):
         if i not in cache:
@@ -206,6 +229,11 @@ def main():
     # --- frame 0 defines topology ------------------------------------------
     surf0 = surface(plan[0][0])
     n_full = surf0.n_points
+    if args.warp_by == "auto" and len(plan) > 1:
+        # if POINTS already move between frames the file is deformed-coordinates style: don't add displacement again
+        last = surface(plan[-1][1])
+        if last.n_points == n_full and np.abs(np.asarray(last.points) - np.asarray(surf0.points)).max() > 0:
+            args.warp_by = "none"
     fields = pick_fields(surf0, args.fields.split(",") if args.fields else None)
     fields.pop("part_id", None)
     print(f"surface: {n_full} points, {surf0.n_cells} triangles; fields: {fields}")
@@ -252,7 +280,7 @@ def main():
             for name, assoc in fields.items():
                 for ename, arr in field_arrays(surf, name, assoc, args.components):
                     vals[ename] = arr[sel]
-            sampled[frame] = (np.asarray(surf.points[sel], np.float32), vals)
+            sampled[frame] = (deformed_points(surf)[sel], vals)
         return sampled[frame]
 
     for fi, (a, b, w, _) in enumerate(plan):
