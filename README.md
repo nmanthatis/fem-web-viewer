@@ -13,6 +13,9 @@ publish.sh                commit site/cases and push (GitHub Actions deploys Pag
 serve.sh                  local preview on http://localhost:8000
 ```
 
+Day-to-day instructions (viewing, adding a run, sharing links with the access code)
+are in **[USAGE.md](USAGE.md)**. The rest of this file is the full reference.
+
 ## 1. Export a time series from ParaView
 
 Open your result (`.xplt`, `.odb` via the Abaqus reader, `.vtk`, ...), apply any filters

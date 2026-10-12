@@ -9,6 +9,8 @@ viewer (`site/viewer.html`) with timeline, colormaps, clip planes, encryption, g
 Published: https://github.com/nmanthatis/fem-web-viewer → live at https://nmanthatis.github.io/fem-web-viewer/
 (public repo, Pages deployed by `.github/workflows/pages.yml` on every push to main).
 
+Usage notes for collaborators and for adding/sharing runs: `USAGE.md` (added 2026-10-12).
+
 ## Published cases
 - **Clip in RV** › `clip_rv4mmHg` — `biv_valve_pipeline/runs/01_clip_rv4mmHg` (model.*.vtk, 404 solver
   steps → 40 frames linear in time, 0–0.2455 s), stress + Lagrange strain (vm/trace/p1), parts
