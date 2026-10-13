@@ -1,58 +1,5 @@
 [
  {
-  "name": "sphere_demo",
-  "title": "Demo: deforming sphere",
-  "description": "Synthetic 20-frame test",
-  "group": "",
-  "nFrames": 24,
-  "nVerts": 641,
-  "nTris": 1386,
-  "fields": [
-   "displacement|mag",
-   "pressure",
-   "stress|vm",
-   "stress|trace",
-   "stress|p1"
-  ],
-  "encrypted": false,
-  "sizeMB": 0.5
- },
- {
-  "name": "sphere_demo_dec",
-  "title": "Demo: sphere decimated 60%",
-  "description": "",
-  "nFrames": 10,
-  "nVerts": 225,
-  "nTris": 554,
-  "fields": [
-   "pressure",
-   "displacement|mag"
-  ],
-  "encrypted": false,
-  "sizeMB": 0.1
- },
- {
-  "name": "leaflet_frame40",
-  "title": "Leaflet frame 40 (single frame)",
-  "description": "",
-  "group": "",
-  "nFrames": 1,
-  "nVerts": 2000,
-  "nTris": 3798,
-  "fields": [
-   "displacement|mag",
-   "shell_thickness",
-   "stress|vm",
-   "stress|trace",
-   "stress|p1",
-   "Lagrange_strain|vm",
-   "Lagrange_strain|trace",
-   "Lagrange_strain|p1"
-  ],
-  "encrypted": true,
-  "sizeMB": 0.1
- },
- {
   "name": "clip_rv4mmHg",
   "title": "Diseased valve + clip in BiV, RV 4 mmHg",
   "description": "Run 01_clip_rv4mmHg: A1S2 clip, annulus tied to the 3 mm diseased wall, RV + trunk pressurized to 4 mmHg (t = 0.16\u20130.21 s).",

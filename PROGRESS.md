@@ -17,16 +17,15 @@ Usage notes for collaborators and for adding/sharing runs: `USAGE.md` (added 202
   0–6 named (part 7 = 97 non-surface cells, dropped). Encrypted; passphrase is the lab name code
   the user chose (not written here). Share link = viewer URL + `#k=<code>`.
 
-## Test cases currently in site/cases
-- `sphere_demo`, `sphere_demo_dec` — synthetic deforming sphere (from `test_data/`, gitignored;
-  regenerate with the snippet in git history / ask Claude). Remove before publishing real work.
-- `leaflet_frame40` — single frame from `valve_in_febio/viz`, encrypted with passphrase `testkey`.
+## Test cases
+Demo cases (`sphere_demo*`, `leaflet_frame40`) were removed from `site/cases` on 2026-10-13; the
+synthetic sphere generator is in git history if a test case is needed again.
 
 ## Next steps
 - [x] First real case exported (2026-10-08, clip_rv4mmHg).
 - [ ] Manifest (`cases.toml` + `build_all.py`) so re-exports are one command — offered, not yet requested.
 - [x] GitHub repo + Pages (2026-10-08).
-- [ ] Delete demo cases from `site/cases/` (and `index.json` entries) before sharing.
+- [x] Delete demo cases from `site/cases/` (2026-10-13).
 - [ ] Nice-to-haves: per-case camera presets, side-by-side comparison of two cases,
       vector glyphs, volume (not just surface) export, pause-on-hover frame tooltip.
 
