@@ -4,6 +4,9 @@
 See CLAUDE.md: exported frames are always evenly spaced in solution time.
 
 ## Status (2026-10-15)
+Link previews: `exporter/make_preview.py NAME` renders preview.jpg/gif/mp4 + an OG share page
+`site/cases/NAME/index.html` (headless Chrome via DevTools protocol, viewer `ui=0&zoom=` params and
+`window.fem.setFrame` hook). Share `…/cases/NAME/` for a thumbnail in chats. Done for the echo TV case.
 Viewer now draws FEBio discrete elements (chordae) as instanced cylinder rods (`--lines` in the
 exporter; rod radius fixed per case in meta.json; `hide=rods` URL param). Second real case published.
 

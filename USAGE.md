@@ -56,6 +56,22 @@ python3 exporter/export_case.py "/path/to/run/model.*.vtk" \
 - Keep each bundle under 50 MB: fewer fields, then `--decimate 0.5`, then fewer frames.
 - Deploy takes about a minute after the push (`gh run list --limit 1` shows it).
 
+Link previews (thumbnail + animation in WhatsApp / Slack / Teams / iMessage):
+
+```bash
+python3 exporter/make_preview.py echo_tv_D-02-S-03-b_t0032          # add --passphrase CODE for encrypted cases
+./publish.sh "preview for echo_tv_D-02-S-03-b_t0032"
+```
+
+This renders `site/cases/NAME/preview.jpg` (static card image), `preview.gif` and `preview.mp4`
+(the animation, ~50 frames, 800 px wide) and a share page `site/cases/NAME/index.html` with Open
+Graph tags that forwards into the viewer. Share `https://nmanthatis.github.io/fem-web-viewer/cases/NAME/`
+(plus `#k=CODE` for encrypted cases) instead of the viewer URL: chat apps show the thumbnail, the
+browser lands in the viewer. Chat apps only ever show a *static* preview image; to show the motion,
+attach `preview.gif` or `preview.mp4` to the message as well. The gallery shows the thumbnail and
+plays the GIF on hover. Options: `--frames`, `--fps`, `--zoom`, `--view "field=...&cmap=...&hide=rods"`.
+Re-run after every re-export, since the assets are rendered from the exported bundle.
+
 Share a case:
 
 - Encrypted case: send `https://nmanthatis.github.io/fem-web-viewer/viewer.html?case=NAME#k=CODE`

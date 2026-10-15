@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { TrackballControls } from 'three/addons/controls/TrackballControls.js';
-import { COLORMAPS, buildLUT, drawLegend, fmt } from './colormaps.js?v=20261015170322';
-import { decryptBundle, keyFromFragment } from './crypto.js?v=20261015170322';
+import { COLORMAPS, buildLUT, drawLegend, fmt } from './colormaps.js?v=20261015172901';
+import { decryptBundle, keyFromFragment } from './crypto.js?v=20261015172901';
 
 const $ = id => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -319,6 +319,8 @@ function applyUrlParams() {
     if (hide.includes(p.id)) { S.partMats[k].visible = S.wireMats[k].visible = false; const cb = $('parts').querySelectorAll('input')[k]; if (cb) cb.checked = false; }
   });
   const fr = parseInt(params.get('frame')); if (isFinite(fr)) setFrame(fr);
+  const z = parseFloat(params.get('zoom'));  // &zoom=2 = camera twice as close (used by make_preview.py)
+  if (z > 0) { camera.position.sub(controls.target).multiplyScalar(1 / z).add(controls.target); controls.update(); }
 }
 
 function setPlaying(p) {
@@ -345,6 +347,8 @@ function animate(t) {
     await load();
     build(); wireUI(); applyDefaults(); applyUrlParams();
     if (S.field !== 'none') colorize();
+    if (params.get('ui') === '0') document.querySelector('.viewer').classList.add('noui');  // headless preview rendering
+    window.fem = { setFrame, meta: S.meta };  // hook for exporter/make_preview.py
     $('overlay').style.display = 'none';
     requestAnimationFrame(t => { S.lastT = t; animate(t); });
     if (params.get('autoplay') !== '0') setPlaying(true);

@@ -78,5 +78,7 @@ input[type=range] { width: 100%; accent-color: var(--accent); }
   .timeline .t { min-width: 0; }
 }
 .viewer.static .panel { bottom: 12px; }
+.viewer.noui .panel, .viewer.noui #toggle-panel, .viewer.noui .timeline { display: none; }
+.card .thumb { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; border-radius: 6px; margin-bottom: 8px; background: var(--scene); display: block; }
 .parts { display: flex; flex-direction: column; gap: 2px; }
 .parts label { cursor: pointer; }
