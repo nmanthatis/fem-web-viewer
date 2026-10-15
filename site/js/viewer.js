@@ -38,7 +38,7 @@ const material = new THREE.MeshStandardMaterial({ vertexColors: true, side: THRE
 const wireMat = new THREE.MeshBasicMaterial({ wireframe: true, color: 0x222222, transparent: true, opacity: 0.35, clippingPlanes: [] });
 let geometry, mesh, wire, axes, rods;
 // rods (chordae etc.): instanced unit cylinders, one per 2-node segment, re-posed every frame
-const rodMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.5, metalness: 0.05, clippingPlanes: [] });
+const rodMat = new THREE.MeshStandardMaterial({ color: 0x8a8a8a, roughness: 0.5, metalness: 0.05, clippingPlanes: [] });
 
 function applySceneTheme() {
   const css = getComputedStyle(document.documentElement);
@@ -294,6 +294,17 @@ function wireUI() {
   if (innerWidth < 700) $('close-panel').onclick();
 }
 
+// Per-case defaults from meta.json ("defaults": {field, cmap, range:[lo,hi]}); URL params still override
+function applyDefaults() {
+  const d = S.meta.defaults; if (!d) return;
+  if (d.field && (d.field === 'none' || S.fields[d.field])) { S.field = d.field; $('field').value = d.field; }
+  if (d.cmap && COLORMAPS.includes(d.cmap)) { S.cmap = d.cmap; S.lut = buildLUT(d.cmap); $('cmap').value = d.cmap; drawLegend($('legendBar'), d.cmap); }
+  if (Array.isArray(d.range) && d.range.length === 2) {
+    S.rangeMode = 'custom'; $('rangeMode').value = 'custom'; $('customRange').style.display = '';
+    $('rmin').value = d.range[0]; $('rmax').value = d.range[1];
+  }
+}
+
 // Optional URL params: &field=pressure&cmap=jet&frame=5&clipX=0.4&clipY=-0.6 (negative = flipped)
 function applyUrlParams() {
   const f = params.get('field'); if (f && (f === 'none' || S.fields[f])) { S.field = f; $('field').value = f; }
@@ -334,7 +345,7 @@ function animate(t) {
 (async () => {
   try {
     await load();
-    build(); wireUI(); applyUrlParams();
+    build(); wireUI(); applyDefaults(); applyUrlParams();
     if (S.field !== 'none') colorize();
     $('overlay').style.display = 'none';
     requestAnimationFrame(t => { S.lastT = t; animate(t); });

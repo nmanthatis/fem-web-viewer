@@ -184,6 +184,9 @@ def main():
     ap.add_argument("--line-parts", help="comma-separated part_id values of the 2-node cells to keep (default: all)")
     ap.add_argument("--line-radius", type=float, default=0.0,
                     help="rod radius in model units (default: 0.3%% of the bounding-box diagonal)")
+    ap.add_argument("--default-field", help="field selected when the case opens, e.g. 'stress|p1'")
+    ap.add_argument("--default-cmap", help="colormap selected when the case opens, e.g. coolwarm")
+    ap.add_argument("--default-range", help="custom color range when the case opens, e.g. '20,70'")
     ap.add_argument("--group", default="", help="gallery section this case is listed under")
     ap.add_argument("--warp-by", default="auto",
                     help="point vector array added to the coordinates (FEBio's VTK export keeps reference "
@@ -390,6 +393,8 @@ def main():
                    "radius": args.line_radius or round(float(np.linalg.norm(hi - lo)) * 0.003, 4)}
                   if args.lines else None),
         "fields": field_meta,
+        "defaults": {k: v for k, v in (("field", args.default_field), ("cmap", args.default_cmap),
+                     ("range", [float(x) for x in args.default_range.split(",")] if args.default_range else None)) if v},
         "bbox": [lo.tolist(), hi.tolist()],
         "offsets": offsets,
         "byteLength": len(data),
