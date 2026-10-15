@@ -17,5 +17,26 @@
   ],
   "encrypted": true,
   "sizeMB": 33.9
+ },
+ {
+  "name": "echo_tv_D-02-S-03-b_t0032",
+  "title": "Echo TV D-02-S-03-b, chordae rerun t0032",
+  "description": "Patient tricuspid valve D-02-S-03-b reconstructed from echo. Isotropic Lee-Sacks leaflet (c0 2.386, c1 8.409), 49 chordae to 3 papillary points, ventricular pressure ramped smoothly to 20 mmHg over 0-0.05 s then held to 0.1 s (mass damping C=3000). Pareto-search rerun t0032, all frames.",
+  "group": "Echo tricuspid valves",
+  "nFrames": 100,
+  "nVerts": 2003,
+  "nTris": 3800,
+  "fields": [
+   "displacement|mag",
+   "stress|vm",
+   "stress|trace",
+   "stress|p1",
+   "Lagrange_strain|vm",
+   "Lagrange_strain|trace",
+   "Lagrange_strain|p1",
+   "shell_thickness"
+  ],
+  "encrypted": false,
+  "sizeMB": 8.9
  }
 ]

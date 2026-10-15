@@ -36,7 +36,9 @@ const planes = {
 };
 const material = new THREE.MeshStandardMaterial({ vertexColors: true, side: THREE.DoubleSide, roughness: 0.55, metalness: 0.05, clippingPlanes: [] });
 const wireMat = new THREE.MeshBasicMaterial({ wireframe: true, color: 0x222222, transparent: true, opacity: 0.35, clippingPlanes: [] });
-let geometry, mesh, wire, axes;
+let geometry, mesh, wire, axes, rods;
+// rods (chordae etc.): instanced unit cylinders, one per 2-node segment, re-posed every frame
+const rodMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.5, metalness: 0.05, clippingPlanes: [] });
 
 function applySceneTheme() {
   const css = getComputedStyle(document.documentElement);
@@ -102,6 +104,7 @@ async function load() {
   for (const f of S.meta.fields) {
     const k = `field:${f.name}`; S.fields[f.name] = new Float32Array(buf, o[k][0], o[k][1] / 4);
   }
+  if (o.lines) S.lines = new Uint32Array(buf, o.lines[0], o.lines[1] / 4);
 }
 
 // ------------------------------------------------------------------ scene build
@@ -118,6 +121,11 @@ function build() {
   S.partMats = mats; S.wireMats = wmats;
   mesh = new THREE.Mesh(geometry, mats); mesh.frustumCulled = false; scene.add(mesh);
   wire = new THREE.Mesh(geometry, wmats); wire.frustumCulled = false; wire.visible = false; scene.add(wire);
+  if (m.lines && S.lines && m.lines.count) {
+    S.rodRadius = m.lines.radius;
+    rods = new THREE.InstancedMesh(new THREE.CylinderGeometry(1, 1, 1, 8, 1), rodMat, m.lines.count);
+    rods.frustumCulled = false; scene.add(rods);
+  }
 
   const [lo, hi] = m.bbox;
   const size = Math.hypot(hi[0] - lo[0], hi[1] - lo[1], hi[2] - lo[2]);
@@ -141,10 +149,26 @@ function setFrame(i) {
   geometry.attributes.position.array.set(S.positions.subarray(i * n3, (i + 1) * n3));
   geometry.attributes.position.needsUpdate = true;
   geometry.computeVertexNormals();
+  poseRods();
   colorize();
   $('frame').value = i;
   const t = m.times[i];
   $('tlabel').textContent = `${i + 1}/${m.nFrames}  t=${fmt(t)}`;
+}
+
+const _a = new THREE.Vector3(), _b = new THREE.Vector3(), _q = new THREE.Quaternion(), _m = new THREE.Matrix4(), _s = new THREE.Vector3(), _up = new THREE.Vector3(0, 1, 0);
+function poseRods() {
+  if (!rods) return;
+  const P = geometry.attributes.position.array, L = S.lines, r = S.rodRadius;
+  for (let k = 0; k < rods.count; k++) {
+    const i = L[2 * k] * 3, j = L[2 * k + 1] * 3;
+    _a.set(P[i], P[i + 1], P[i + 2]); _b.set(P[j], P[j + 1], P[j + 2]);
+    const len = _a.distanceTo(_b);
+    _b.sub(_a).normalize(); _q.setFromUnitVectors(_up, _b);
+    _a.addScaledVector(_b, len / 2); _s.set(r, len, r);
+    _m.compose(_a, _q, _s); rods.setMatrixAt(k, _m);
+  }
+  rods.instanceMatrix.needsUpdate = true;
 }
 
 function currentRange() {
@@ -192,13 +216,15 @@ function updateClipping() {
     active.push(p);
   });
   for (const mm of [...(S.partMats || []), ...(S.wireMats || [])]) mm.clippingPlanes = active;
+  rodMat.clippingPlanes = active;
 }
 
 // ------------------------------------------------------------------ UI wiring
 function wireUI() {
   const m = S.meta;
   $('title').textContent = m.title; $('desc').textContent = m.description || '';
-  $('stats').textContent = `${m.nFrames} frames · ${m.nVerts.toLocaleString()} vertices · ${m.nTris.toLocaleString()} triangles`;
+  $('stats').textContent = `${m.nFrames} frames · ${m.nVerts.toLocaleString()} vertices · ${m.nTris.toLocaleString()} triangles`
+    + (rods ? ` · ${rods.count} ${m.lines.name.toLowerCase()}` : '');
   $('frame').max = m.nFrames - 1;
   if (m.nFrames < 2) { $('timeline').style.display = 'none'; document.querySelector('.viewer').classList.add('static'); }
 
@@ -222,7 +248,7 @@ function wireUI() {
   $('wire').onchange = e => wire.visible = e.target.checked;
   $('flat').onchange = e => { for (const mm of S.partMats) { mm.flatShading = e.target.checked; mm.needsUpdate = true; } };
   const partsBox = $('parts');
-  if (m.parts && m.parts.length > 1) {
+  if (m.parts && (m.parts.length > 1 || rods)) {
     $('partsSection').style.display = '';
     m.parts.forEach((p, k) => {
       const lab = document.createElement('label');
@@ -230,6 +256,15 @@ function wireUI() {
       lab.querySelector('input').onchange = e => { S.partMats[k].visible = e.target.checked; S.wireMats[k].visible = e.target.checked; };
       partsBox.appendChild(lab);
     });
+  }
+  if (rods) {
+    $('partsSection').style.display = '';
+    const lab = document.createElement('label');
+    lab.innerHTML = `<input type="checkbox" checked> ${m.lines.name}`;
+    lab.querySelector('input').onchange = e => rods.visible = e.target.checked;
+    partsBox.appendChild(lab);
+    $('rodRow').style.display = ''; $('rodR').value = S.rodRadius;
+    $('rodR').oninput = e => { const v = parseFloat(e.target.value); if (v > 0) { S.rodRadius = v; poseRods(); } };
   }
   $('axes').onchange = e => axes.visible = e.target.checked;
   $('reset').onclick = resetView;
@@ -268,7 +303,9 @@ function applyUrlParams() {
     S.clip[ax] = { on: true, flip: v < 0, v: Math.abs(v) }; $('clip' + ax).checked = true; $('clip' + ax + 'v').value = Math.abs(v);
   }
   updateClipping();
-  const hide = (params.get('hide') || '').split(',').filter(Boolean).map(Number);
+  const hideRaw = (params.get('hide') || '').split(',').filter(Boolean);
+  if (rods && hideRaw.includes('rods')) { rods.visible = false; const cbs = $('parts').querySelectorAll('input'); cbs[cbs.length - 1].checked = false; }
+  const hide = hideRaw.map(Number);
   if (hide.length && S.meta.parts) S.meta.parts.forEach((p, k) => {
     if (hide.includes(p.id)) { S.partMats[k].visible = S.wireMats[k].visible = false; const cb = $('parts').querySelectorAll('input')[k]; if (cb) cb.checked = false; }
   });

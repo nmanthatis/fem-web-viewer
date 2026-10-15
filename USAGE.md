@@ -42,6 +42,10 @@ python3 exporter/export_case.py "/path/to/run/model.*.vtk" \
 ./publish.sh "add clip_rv4mmHg"
 ```
 
+- FEBio discrete elements (chordae, springs) come out of the VTK export as 2-node cells with an
+  unknown cell type; `--lines Chordae` exports them as rods (default radius 0.3 % of the bounding
+  box, or `--line-radius 0.16` in model units; adjustable in the viewer). Example:
+  `--parts 0 --part-names "0=Leaflets" --lines Chordae --line-radius 0.16 --frames 100`.
 - `--group` is the heading on the gallery page; `--part-names` follows the `<Elements>`
   order in `model.feb`.
 - Frames are always resampled to uniform Δt (project rule in CLAUDE.md). Never use

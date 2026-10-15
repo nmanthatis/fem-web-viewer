@@ -8,12 +8,14 @@ data.bin (little endian, byte offsets recorded in meta.json["offsets"]):
     indices    uint32 [nTris*3]
     positions  float32 [nFrames, nVerts, 3]
     field_k    float32 [nFrames, nVerts]       (one block per exported field)
+    lines      uint32 [nLines*2]               (only with --lines: 2-node cells as rods)
 
 Usage examples:
     export_case.py runs/valve.pvd --name valve --title "Valve, uniform material"
     export_case.py "viz/frame_*.vtp" --name test --fields stress,displacement --decimate 0.5
     export_case.py runs/valve.pvd --name valve --frames 60 --encrypt
     export_case.py "runs/model.*.vtk" --name biv --parts 0,1,2,6 --part-names "6=RV wall" --group "Clip in RV"
+    export_case.py "runs/t0032.*.vtk" --name tv --parts 0 --lines Chordae   # FEBio discrete elements as rods
 
 Frames are resampled EVENLY IN SOLUTION TIME (project rule, see CLAUDE.md); pass
 --raw-steps only when you really want the solver's adaptive steps.
@@ -87,6 +89,19 @@ def to_surface(ds, parts=None):
         ds = ds.extract_cells(np.flatnonzero(keep))
     surf = ds.extract_surface(pass_pointid=True, pass_cellid=True, algorithm="dataset_surface")
     return surf.triangulate()
+
+
+def two_node_cells(ds, parts=None):
+    """(nCells, 2) original point ids of every 2-node cell (FEBio discrete elements such as
+    chordae come out of its VTK export as 2-node cells with an unknown cell type)."""
+    off = np.asarray(ds.offset)
+    conn = np.asarray(ds.cell_connectivity)
+    sizes = np.diff(off)
+    sel = sizes == 2
+    if parts is not None and "part_id" in ds.cell_data:
+        sel &= np.isin(np.asarray(ds.cell_data["part_id"]), parts)
+    starts = off[:-1][sel]
+    return np.stack([conn[starts], conn[starts + 1]], axis=1).astype(np.int64)
 
 
 def pick_fields(surf, requested):
@@ -164,6 +179,11 @@ def main():
                     help="export the solver's own (adaptive, non-uniform) steps instead of resampling linearly in time")
     ap.add_argument("--parts", help="comma-separated part_id values to keep (default: all)")
     ap.add_argument("--part-names", help="labels for parts, e.g. '0=anterior leaflet,6=RV wall'")
+    ap.add_argument("--lines", help="label for 2-node cells (FEBio discrete elements, e.g. chordae) to export as rods, "
+                                    "e.g. 'Chordae'; default: not exported")
+    ap.add_argument("--line-parts", help="comma-separated part_id values of the 2-node cells to keep (default: all)")
+    ap.add_argument("--line-radius", type=float, default=0.0,
+                    help="rod radius in model units (default: 0.3%% of the bounding-box diagonal)")
     ap.add_argument("--group", default="", help="gallery section this case is listed under")
     ap.add_argument("--warp-by", default="auto",
                     help="point vector array added to the coordinates (FEBio's VTK export keeps reference "
@@ -219,12 +239,17 @@ def main():
             pts = pts + np.asarray(surf.point_data[warp[0]], np.float32)
         return pts
 
-    def surface(i):
+    def dataset(i):
         if i not in cache:
             if len(cache) > 2:
                 cache.pop(min(cache))
-            cache[i] = to_surface(load(i), parts)
-        return cache[i]
+            ds = load(i)
+            cache[i] = (ds, to_surface(ds, parts))
+        return cache[i][0]
+
+    def surface(i):
+        dataset(i)
+        return cache[i][1]
 
     # --- frame 0 defines topology ------------------------------------------
     surf0 = surface(plan[0][0])
@@ -263,6 +288,22 @@ def main():
     n_verts = len(sel)
     indices = faces.astype(np.uint32).reshape(-1)
 
+    # --- 2-node cells (chordae) as rods: endpoints that are not surface vertices are appended
+    line_pairs = np.zeros((0, 2), np.int64)
+    extra_orig = np.zeros(0, np.int64)  # original point ids of appended endpoint vertices
+    if args.lines:
+        lparts = [int(x) for x in args.line_parts.split(",")] if args.line_parts else None
+        raw = two_node_cells(dataset(plan[0][0]), lparts)
+        orig = np.asarray(surf0.point_data["vtkOriginalPointIds"])[sel] if "vtkOriginalPointIds" in surf0.point_data else sel
+        lookup = {int(o): k for k, o in enumerate(orig)}
+        extra = sorted({int(p) for p in raw.reshape(-1) if int(p) not in lookup})
+        for k, o in enumerate(extra):
+            lookup[o] = n_verts + k
+        extra_orig = np.asarray(extra, np.int64)
+        line_pairs = np.vectorize(lookup.get)(raw) if len(raw) else line_pairs
+        n_verts += len(extra)
+        print(f"rods: {len(line_pairs)} segments ({len(extra)} extra endpoint vertices)")
+
     # --- gather frames ------------------------------------------------------
     n_frames = len(plan)
     positions = np.empty((n_frames, n_verts, 3), np.float32)
@@ -280,7 +321,16 @@ def main():
             for name, assoc in fields.items():
                 for ename, arr in field_arrays(surf, name, assoc, args.components):
                     vals[ename] = arr[sel]
-            sampled[frame] = (deformed_points(surf)[sel], vals)
+            pts = deformed_points(surf)[sel]
+            if len(extra_orig):
+                ds = dataset(frame)
+                xp = np.asarray(ds.points, np.float32)[extra_orig]
+                if warp[0] and warp[0] in ds.point_data:
+                    xp = xp + np.asarray(ds.point_data[warp[0]], np.float32)[extra_orig]
+                pts = np.concatenate([pts, xp])
+                pad = np.full(len(extra_orig), np.nan, np.float32)
+                vals = {k: np.concatenate([v, pad]) for k, v in vals.items()}
+            sampled[frame] = (pts, vals)
         return sampled[frame]
 
     for fi, (a, b, w, _) in enumerate(plan):
@@ -311,6 +361,8 @@ def main():
 
     add("indices", indices)
     add("positions", positions)
+    if args.lines:
+        add("lines", line_pairs.astype(np.uint32).reshape(-1))
     field_meta = []
     for ename, arr in field_data.items():
         add(f"field:{ename}", arr)
@@ -334,6 +386,9 @@ def main():
         "times": [t for _, _, _, t in plan],
         "linearTime": not args.raw_steps,
         "parts": part_meta,
+        "lines": ({"name": args.lines, "count": int(len(line_pairs)),
+                   "radius": args.line_radius or round(float(np.linalg.norm(hi - lo)) * 0.003, 4)}
+                  if args.lines else None),
         "fields": field_meta,
         "bbox": [lo.tolist(), hi.tolist()],
         "offsets": offsets,
