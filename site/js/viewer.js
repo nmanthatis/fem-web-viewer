@@ -263,8 +263,6 @@ function wireUI() {
     lab.innerHTML = `<input type="checkbox" checked> ${m.lines.name}`;
     lab.querySelector('input').onchange = e => rods.visible = e.target.checked;
     partsBox.appendChild(lab);
-    $('rodRow').style.display = ''; $('rodR').value = S.rodRadius;
-    $('rodR').oninput = e => { const v = parseFloat(e.target.value); if (v > 0) { S.rodRadius = v; poseRods(); } };
   }
   $('axes').onchange = e => axes.visible = e.target.checked;
   $('reset').onclick = resetView;

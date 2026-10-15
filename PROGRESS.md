@@ -5,7 +5,7 @@ See CLAUDE.md: exported frames are always evenly spaced in solution time.
 
 ## Status (2026-10-15)
 Viewer now draws FEBio discrete elements (chordae) as instanced cylinder rods (`--lines` in the
-exporter; rod radius editable in the panel; `hide=rods` URL param). Second real case published.
+exporter; rod radius fixed per case in meta.json; `hide=rods` URL param). Second real case published.
 
 ## Status (2026-10-08)
 Working end to end locally: exporter (`exporter/export_case.py`) → `site/cases/*` → three.js
@@ -21,10 +21,10 @@ Usage notes for collaborators and for adding/sharing runs: `USAGE.md` (added 202
   0–6 named (part 7 = 97 non-surface cells, dropped). Encrypted; passphrase is the lab name code
   the user chose (not written here). Share link = viewer URL + `#k=<code>`.
 
-- **Echo tricuspid valves** › `echo_tv_D-02-S-03-b_t0032` —
+- **Echo valves** › `echo_tv_D-02-S-03-b_t0032` —
   `valve_in_febio/runs/echo_tv_realvalves/chordae_D-02-S-03-b/mech_cusp_pm/pareto_search/rerun_t0032_allframes`
   (t0032.*.vtk, 2017 steps → 100 frames linear in time, 0–0.1 s, 20 mmHg ramp 0–0.05 s then hold).
-  Leaflets (part 0, quads) + 49 chordae as black rods r = 0.16 mm; fields displacement, stress,
+  Leaflets (part 0, quads) + 49 chordae as gray rods r = 0.07 mm; fields displacement, stress,
   Lagrange strain, shell thickness. 8.9 MB, **not encrypted** (user's choice). Matches the user's
   ParaView macro (warp by displacement, quads only, smooth normals).
 

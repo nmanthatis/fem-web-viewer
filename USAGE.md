@@ -44,8 +44,8 @@ python3 exporter/export_case.py "/path/to/run/model.*.vtk" \
 
 - FEBio discrete elements (chordae, springs) come out of the VTK export as 2-node cells with an
   unknown cell type; `--lines Chordae` exports them as rods (default radius 0.3 % of the bounding
-  box, or `--line-radius 0.16` in model units; adjustable in the viewer). Example:
-  `--parts 0 --part-names "0=Leaflets" --lines Chordae --line-radius 0.16 --frames 100`.
+  box, or `--line-radius 0.07` in model units; `lines.radius` in `meta.json`). Example:
+  `--parts 0 --part-names "0=Leaflets" --lines Chordae --line-radius 0.07 --frames 100`.
 - Per-case view defaults: `--default-field "stress|p1" --default-cmap coolwarm --default-range 20,70`
   (stored as `defaults` in the case's `meta.json`, so they can also be edited there by hand;
   URL parameters still override them).
