@@ -16,8 +16,8 @@ Site: https://nmanthatis.github.io/fem-web-viewer/
    - **Clipping** sliders cut the model along X/Y/Z; *flip* changes the side kept
    - **Display**: wireframe, flat shading, axes · **Screenshot** saves a PNG with a
      transparent background
-4. The browser URL updates as you change field, colormap, clip planes, hidden parts and
-   frame, so you can copy it to show someone exactly the view you are looking at.
+4. **Copy view** puts a link to exactly what you see (camera, field, colormap, range, frame,
+   hidden parts, clip planes) on the clipboard, so you can show someone the same view.
    Keep `#k=CODE` at the end when you forward it.
 
 Fields: `stress (von Mises)`, `stress (trace)`, `stress (p1)` = max principal stress;
@@ -47,6 +47,17 @@ python3 exporter/export_case.py "/path/to/run/model.*.vtk" \
   unknown cell type; `--lines Chordae` exports them as rods (default radius 0.3 % of the bounding
   box, or `--line-radius 0.07` in model units; `lines.radius` in `meta.json`). Example:
   `--parts 0 --part-names "0=Leaflets" --lines Chordae --line-radius 0.07 --frames 100`.
+- Runs of the same kind share a preset: `--preset echo_valve` loads `exporter/presets/echo_valve.json`
+  (fields, parts, chordae rods, 100 frames, group `Echo valves/D-02-S-03-b`, colour defaults, and the
+  **start pose** + **thumbnail pose** of the camera, relative to the bounding box so they fit every
+  variant of the valve). Flags given on the command line still win. Add a new valve variant with
+  `export_case.py "<run>/t00NN.*.vtk" --name echo_tv_<variant> --title "Belly chordae" --preset echo_valve`
+  then `make_preview.py` and `publish.sh`.
+- A group with a slash (`Echo valves/D-02-S-03-b`) becomes a section with a sub-heading in the gallery.
+- To change a pose: orbit to the view you want, press **Copy view** in the viewer, and paste the link
+  (it carries `cam=`, field, range and frame). Put the camera into the preset as `pos`/`target`/`up`
+  (absolute) or convert to `dir`/`dist`/`target` fractions (relative, preferred). "Reset view" in the
+  viewer returns to the case's start pose.
 - Per-case view defaults: `--default-field "stress|p1" --default-cmap coolwarm --default-range 20,70`
   (stored as `defaults` in the case's `meta.json`, so they can also be edited there by hand;
   URL parameters still override them).

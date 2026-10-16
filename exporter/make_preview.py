@@ -170,7 +170,7 @@ def main():
     ap.add_argument("--size", default="1200x675", help="render size WxH (= the OG image size)")
     ap.add_argument("--gif-width", type=int, default=800, help="GIF/MP4 are downscaled to this width")
     ap.add_argument("--fps", type=float, default=12)
-    ap.add_argument("--zoom", type=float, default=1.3, help="camera closer than the viewer's default by this factor")
+    ap.add_argument("--zoom", type=float, default=1.0, help="camera closer than the case's thumbnail pose by this factor")
     ap.add_argument("--view", default="", help="extra viewer URL params, e.g. 'field=stress|p1&cmap=coolwarm&hide=rods'")
     ap.add_argument("--passphrase", help="for encrypted cases")
     ap.add_argument("--base-url", default=DEFAULT_BASE, help="public site URL for the absolute OG links")
@@ -188,7 +188,7 @@ def main():
                               stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     try:
         time.sleep(0.5)
-        url = f"http://127.0.0.1:{port}/viewer.html?case={args.name}&autoplay=0&ui=0&zoom={args.zoom:g}"
+        url = f"http://127.0.0.1:{port}/viewer.html?case={args.name}&autoplay=0&ui=0&pose=thumb&zoom={args.zoom:g}"
         if args.view:
             url += "&" + args.view.lstrip("&?")
         if args.passphrase:

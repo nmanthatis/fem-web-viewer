@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>FEM Viewer</title>
-<link rel="stylesheet" href="style.css?v=20261016154558">
+<link rel="stylesheet" href="style.css?v=20261016171704">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 16 16%27%3E%3Ccircle cx=%278%27 cy=%278%27 r=%277%27 fill=%27%235aa9ff%27/%3E%3C/svg%3E">
 <script>
   try { const t = localStorage.getItem('theme'); if (t) document.documentElement.dataset.theme = t; } catch (e) {}
@@ -27,13 +27,19 @@
     el.innerHTML = '';
     if (!cases.length) el.innerHTML = '<div class="muted">No cases yet.</div>';
     cases.sort((a, b) => ((a.group || '') === '') - ((b.group || '') === '') || (a.group || '').localeCompare(b.group || '') || a.title.localeCompare(b.title));
-    let lastGroup = null;
+    // group "Echo valves/D-02-S-03-b" = section "Echo valves", sub-section "D-02-S-03-b"
+    let lastTop = null, lastGroup = null;
     for (const c of cases) {
       const g = c.group || '';
       if (g !== lastGroup) {
         lastGroup = g;
-        const h = document.createElement('h2'); h.className = 'group'; h.textContent = g || 'Other';
-        if (g || cases.some(x => x.group)) el.appendChild(h);
+        const [top, ...rest] = g.split('/');
+        if (top !== lastTop) {
+          lastTop = top;
+          const h = document.createElement('h2'); h.className = 'group'; h.textContent = top || 'Other';
+          if (g || cases.some(x => x.group)) el.appendChild(h);
+        }
+        if (rest.length) { const h3 = document.createElement('h3'); h3.className = 'subgroup'; h3.textContent = rest.join(' / '); el.appendChild(h3); }
       }
       const a = document.createElement('a');
       a.className = 'card'; a.href = `viewer.html?case=${encodeURIComponent(c.name)}`;

@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { TrackballControls } from 'three/addons/controls/TrackballControls.js';
-import { COLORMAPS, buildLUT, drawLegend, fmt } from './colormaps.js?v=20261016154558';
-import { decryptBundle, keyFromFragment } from './crypto.js?v=20261016154558';
+import { COLORMAPS, buildLUT, drawLegend, fmt } from './colormaps.js?v=20261016171704';
+import { decryptBundle, keyFromFragment } from './crypto.js?v=20261016171704';
 
 const $ = id => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -136,11 +136,40 @@ function build() {
 }
 
 function resetView() {
+  const d = S.meta.defaults;
+  applyCamera((d && d.camera) || { dir: [0.7, 0.5, 1], up: [0, 1, 0], dist: 1.4 });
+}
+
+// Camera pose. Relative form (works for any run of the same kind of model): dir = viewing direction
+// from the target towards the camera, dist = distance in bounding-box diagonals, target = fractions of
+// the bounding box (default centre). Absolute form: pos, target, up in model coordinates.
+function applyCamera(c) {
   const [lo, hi] = S.meta.bbox;
-  const c = new THREE.Vector3((lo[0] + hi[0]) / 2, (lo[1] + hi[1]) / 2, (lo[2] + hi[2]) / 2);
   const size = Math.hypot(hi[0] - lo[0], hi[1] - lo[1], hi[2] - lo[2]);
-  camera.position.copy(c).add(new THREE.Vector3(0.7, 0.5, 1).normalize().multiplyScalar(size * 1.4));
-  camera.up.set(0, 1, 0); controls.target.copy(c); controls.update();
+  if (c.pos) {
+    camera.position.fromArray(c.pos); controls.target.fromArray(c.target || [(lo[0] + hi[0]) / 2, (lo[1] + hi[1]) / 2, (lo[2] + hi[2]) / 2]);
+  } else {
+    const f = c.target || [0.5, 0.5, 0.5];
+    controls.target.set(lo[0] + f[0] * (hi[0] - lo[0]), lo[1] + f[1] * (hi[1] - lo[1]), lo[2] + f[2] * (hi[2] - lo[2]));
+    camera.position.copy(controls.target).add(new THREE.Vector3().fromArray(c.dir).normalize().multiplyScalar(size * (c.dist || 1.4)));
+  }
+  camera.up.fromArray(c.up || [0, 1, 0]).normalize(); controls.update();
+}
+
+// URL of the current view (case, field, colormap, range, frame, camera, hidden parts, clip planes)
+function viewUrl() {
+  const u = new URL(location.href); const q = u.searchParams; q.set('case', caseName);
+  q.set('field', S.field); q.set('cmap', S.cmap);
+  if (S.rangeMode === 'custom') q.set('range', `${$('rmin').value},${$('rmax').value}`); else q.delete('range');
+  q.set('frame', S.frame); q.set('autoplay', '0');
+  const r = v => +v.toPrecision(5);
+  q.set('cam', [...camera.position.toArray(), ...controls.target.toArray(), ...camera.up.toArray()].map(r).join(','));
+  const hide = (S.meta.parts || []).filter((p, k) => S.partMats[k] && !S.partMats[k].visible).map(p => p.id);
+  if (rods && !rods.visible) hide.push('rods');
+  if (hide.length) q.set('hide', hide.join(',')); else q.delete('hide');
+  for (const ax of ['X', 'Y', 'Z']) { const c = S.clip[ax]; if (c.on) q.set('clip' + ax, (c.flip ? -c.v : c.v).toFixed(3)); else q.delete('clip' + ax); }
+  u.search = q.toString();
+  return u.href;
 }
 
 function setFrame(i) {
@@ -266,6 +295,11 @@ function wireUI() {
   }
   $('axes').onchange = e => axes.visible = e.target.checked;
   $('reset').onclick = resetView;
+  $('copyview').onclick = async () => {
+    const url = viewUrl(); const b = $('copyview');
+    try { await navigator.clipboard.writeText(url); b.textContent = 'Copied!'; } catch (e) { prompt('Copy this link', url); }
+    setTimeout(() => { b.textContent = 'Copy view'; }, 1500);
+  };
   $('shot').onclick = () => {
     // render once with a transparent background so the PNG can be dropped onto slides/figures
     const bg = scene.background; scene.background = null; renderer.setClearColor(0x000000, 0);
@@ -319,6 +353,12 @@ function applyUrlParams() {
     if (hide.includes(p.id)) { S.partMats[k].visible = S.wireMats[k].visible = false; const cb = $('parts').querySelectorAll('input')[k]; if (cb) cb.checked = false; }
   });
   const fr = parseInt(params.get('frame')); if (isFinite(fr)) setFrame(fr);
+  const rg = (params.get('range') || '').split(',').map(Number);
+  if (rg.length === 2 && rg.every(isFinite)) { S.rangeMode = 'custom'; $('rangeMode').value = 'custom'; $('customRange').style.display = ''; $('rmin').value = rg[0]; $('rmax').value = rg[1]; }
+  const d = S.meta.defaults || {};
+  if (params.get('pose') === 'thumb' && d.thumbCamera) applyCamera(d.thumbCamera);  // make_preview.py
+  const cam = (params.get('cam') || '').split(',').map(Number);
+  if (cam.length === 9 && cam.every(isFinite)) applyCamera({ pos: cam.slice(0, 3), target: cam.slice(3, 6), up: cam.slice(6, 9) });
   const z = parseFloat(params.get('zoom'));  // &zoom=2 = camera twice as close (used by make_preview.py)
   if (z > 0) { camera.position.sub(controls.target).multiplyScalar(1 / z).add(controls.target); controls.update(); }
 }

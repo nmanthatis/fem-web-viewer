@@ -15,6 +15,13 @@ published cases); FEBio VTK files are reference coordinates + `displacement`, wa
 FEBio runs use mm / kPa / mN / s / kg, so all stress fields are in kPa.
 
 ## What works (as of 2026-10-16)
+- Presets: `--preset echo_valve` (`exporter/presets/echo_valve.json`) gives every echo-valve variant the
+  same fields, parts, chordae rods, 100 frames, group `Echo valves/D-02-S-03-b`, colour defaults and
+  two camera poses relative to the bounding box: **start pose** = atrial (surgeon's) view centred on
+  the annulus, **thumbnail pose** = ventricular oblique showing leaflet belly + chordae. "Reset view"
+  returns to the start pose; `make_preview.py` renders from the thumbnail pose (`pose=thumb`).
+- Viewer "Copy view" button → link with `cam=` (9 numbers), field, cmap, `range=`, frame, hidden
+  parts, clip planes. Gallery groups nest with `/` (section + sub-heading).
 - Export: linear-time resampling (`--frames N`), part filtering and naming, tensor invariants
   (vm / trace / p1), decimation, AES-GCM encryption (`--encrypt`), FEBio discrete elements (chordae)
   as rods (`--lines Chordae --line-radius r`), per-case view defaults
@@ -34,7 +41,7 @@ FEBio runs use mm / kPa / mN / s / kg, so all stress fields are in kPa.
   (65 solver files → 40 frames, 0–0.2455 s), stress + Lagrange strain, parts 0–6 named (part 7 =
   97 non-surface cells, dropped), 33.9 MB. Default view: stress vm, viridis, 0–80 kPa. Was encrypted
   until 2026-10-16 (re-exported plain at the user's request).
-- **Echo valves** › `echo_tv_D-02-S-03-b_t0032` —
+- **Echo valves / D-02-S-03-b** › `echo_tv_D-02-S-03-b_t0032` ("Baseline chordae (t0032)") —
   `valve_in_febio/runs/echo_tv_realvalves/chordae_D-02-S-03-b/mech_cusp_pm/pareto_search/rerun_t0032_allframes`
   (2017 steps → 100 frames, 0–0.1 s; 20 mmHg ramp 0–0.05 s then hold). Leaflets (part 0) + 49 chordae
   as gray rods r = 0.07 mm; displacement, stress, Lagrange strain, shell thickness; 8.9 MB. Default
@@ -51,9 +58,13 @@ FEBio runs use mm / kPa / mN / s / kg, so all stress fields are in kPa.
 - The Claude-in-Chrome extension was not connected in these sessions; headless Chrome covered it.
 
 ## Status and next step
-Everything requested is published and documented; nothing is pending from the user.
-Logical next step when a new run arrives: `export_case.py` → `make_preview.py` → `publish.sh`
-(three commands; a `cases.toml` manifest + `build_all.py` would make re-exports one command, offered
+The user is starting a long run of a chordae variant ("belly chordae") of valve D-02-S-03-b with many
+frames. When it finishes:
+`export_case.py "<run>/t00NN.*.vtk" --name echo_tv_D-02-S-03-b_<variant> --title "Belly chordae (t00NN)" --preset echo_valve`
+→ `make_preview.py <name>` → `publish.sh`. It lands next to the baseline under Echo valves / D-02-S-03-b
+with the same poses and colour range. The poses were chosen by Claude on 2026-10-16; the user may
+refine them with "Copy view" (then edit the preset and the existing case's `meta.json`).
+(Manifest idea: a `cases.toml` manifest + `build_all.py` would make re-exports one command, offered
 but not requested). Open nice-to-haves: per-case camera presets, side-by-side comparison, vector
 glyphs, volume export. The encryption path is untested since both cases went public
 (`make_preview.py --passphrase` exists but has not been exercised on a real encrypted case).

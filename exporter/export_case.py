@@ -16,6 +16,7 @@ Usage examples:
     export_case.py runs/valve.pvd --name valve --frames 60 --encrypt
     export_case.py "runs/model.*.vtk" --name biv --parts 0,1,2,6 --part-names "6=RV wall" --group "Clip in RV"
     export_case.py "runs/t0032.*.vtk" --name tv --parts 0 --lines Chordae   # FEBio discrete elements as rods
+    export_case.py "runs/t0040.*.vtk" --name tv_belly --title "Belly chordae" --preset echo_valve
 
 Frames are resampled EVENLY IN SOLUTION TIME (project rule, see CLAUDE.md); pass
 --raw-steps only when you really want the solver's adaptive steps.
@@ -187,6 +188,8 @@ def main():
     ap.add_argument("--default-field", help="field selected when the case opens, e.g. 'stress|p1'")
     ap.add_argument("--default-cmap", help="colormap selected when the case opens, e.g. coolwarm")
     ap.add_argument("--default-range", help="custom color range when the case opens, e.g. '20,70'")
+    ap.add_argument("--preset", help="name of exporter/presets/<name>.json: exporter defaults ('args') and viewer "
+                                     "defaults incl. camera poses ('defaults') shared by runs of the same kind")
     ap.add_argument("--group", default="", help="gallery section this case is listed under")
     ap.add_argument("--warp-by", default="auto",
                     help="point vector array added to the coordinates (FEBio's VTK export keeps reference "
@@ -197,6 +200,12 @@ def main():
     ap.add_argument("--site", default=str(SITE), help="site directory (default ../site)")
     ap.add_argument("--base-url", default="", help="public site URL, used only to print the share link")
     args = ap.parse_args()
+    preset = {}
+    if args.preset:
+        preset = json.loads((HERE / "presets" / f"{args.preset}.json").read_text())
+        for k, v in preset.get("args", {}).items():  # preset fills options left at their parser default
+            if getattr(args, k) == ap.get_default(k):
+                setattr(args, k, v)
 
     times, load = load_frames(args.src)
     if args.raw_steps or len(times) < 3:
@@ -393,8 +402,9 @@ def main():
                    "radius": args.line_radius or round(float(np.linalg.norm(hi - lo)) * 0.003, 4)}
                   if args.lines else None),
         "fields": field_meta,
-        "defaults": {k: v for k, v in (("field", args.default_field), ("cmap", args.default_cmap),
-                     ("range", [float(x) for x in args.default_range.split(",")] if args.default_range else None)) if v},
+        "defaults": {**preset.get("defaults", {}),
+                     **{k: v for k, v in (("field", args.default_field), ("cmap", args.default_cmap),
+                        ("range", [float(x) for x in args.default_range.split(",")] if args.default_range else None)) if v}},
         "bbox": [lo.tolist(), hi.tolist()],
         "offsets": offsets,
         "byteLength": len(data),
