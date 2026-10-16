@@ -1,5 +1,5 @@
 {
-  "_comment": "Echo-derived valve runs (valve_in_febio echo_tv_realvalves). Use: export_case.py ... --preset echo_valve. 'args' are exporter defaults (CLI flags still win); 'defaults' go into meta.json for the viewer. Cameras are relative to the bounding box: dir = direction from target to camera, dist in bbox diagonals, target = bbox fractions (annulus plane sits near the +z end, papillary points at -z).",
+  "_comment": "Echo-derived valve runs (valve_in_febio echo_tv_realvalves). Use: export_case.py ... --preset echo_valve. 'args' are exporter defaults (CLI flags still win); 'defaults' go into meta.json for the viewer. Thumbnail pose = start pose (user's choice, 2026-10-16). Cameras are relative to the bounding box: dir = direction from target to camera, dist in bbox diagonals, target = bbox fractions (annulus plane sits near the +z end, papillary points at -z).",
   "args": {
     "group": "Echo valves/D-02-S-03-b",
     "fields": "displacement,stress,Lagrange_strain,shell_thickness",
@@ -13,7 +13,41 @@
     "default_range": "20,70"
   },
   "defaults": {
-    "camera":      { "dir": [0, 0, 1],         "up": [0, 1, 0], "dist": 1.1,  "target": [0.5, 0.5, 0.88] },
-    "thumbCamera": { "dir": [1, 0.4, -0.45],   "up": [0, 0, 1], "dist": 1.25, "target": [0.5, 0.5, 0.5] }
+    "camera": {
+      "dir": [
+        0,
+        0,
+        1
+      ],
+      "up": [
+        0,
+        1,
+        0
+      ],
+      "dist": 1.1,
+      "target": [
+        0.5,
+        0.5,
+        0.88
+      ]
+    },
+    "thumbCamera": {
+      "dir": [
+        0,
+        0,
+        1
+      ],
+      "up": [
+        0,
+        1,
+        0
+      ],
+      "dist": 1.1,
+      "target": [
+        0.5,
+        0.5,
+        0.88
+      ]
+    }
   }
 }

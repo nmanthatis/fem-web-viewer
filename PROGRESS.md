@@ -18,7 +18,7 @@ FEBio runs use mm / kPa / mN / s / kg, so all stress fields are in kPa.
 - Presets: `--preset echo_valve` (`exporter/presets/echo_valve.json`) gives every echo-valve variant the
   same fields, parts, chordae rods, 100 frames, group `Echo valves/D-02-S-03-b`, colour defaults and
   two camera poses relative to the bounding box: **start pose** = atrial (surgeon's) view centred on
-  the annulus, **thumbnail pose** = ventricular oblique showing leaflet belly + chordae. "Reset view"
+  the annulus, **thumbnail pose** = the same atrial view (user's choice; a ventricular oblique was tried first). "Reset view"
   returns to the start pose; `make_preview.py` renders from the thumbnail pose (`pose=thumb`).
 - Viewer "Copy view" button → link with `cam=` (9 numbers), field, cmap, `range=`, frame, hidden
   parts, clip planes. Gallery groups nest with `/` (section + sub-heading).
