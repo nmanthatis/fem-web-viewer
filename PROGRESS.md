@@ -3,6 +3,12 @@
 ## Rules
 See CLAUDE.md: exported frames are always evenly spaced in solution time.
 
+## Status (2026-10-16)
+Both cases are public (no encryption) with link previews; share `…/cases/NAME/` links in chats.
+Session 2026-10-15/16 added: chordae rods, per-case view defaults (`defaults` in meta.json,
+`--default-*` exporter flags), cache-busting in `publish.sh` (stamps local JS/CSS on every publish),
+`make_preview.py`. Nothing pending from the user.
+
 ## Status (2026-10-15)
 Link previews: `exporter/make_preview.py NAME` renders preview.jpg/gif/mp4 + an OG share page
 `site/cases/NAME/index.html` (headless Chrome via DevTools protocol, viewer `ui=0&zoom=` params and
@@ -40,11 +46,15 @@ synthetic sphere generator is in git history if a test case is needed again.
 - [ ] Manifest (`cases.toml` + `build_all.py`) so re-exports are one command — offered, not yet requested.
 - [x] GitHub repo + Pages (2026-10-08).
 - [x] Delete demo cases from `site/cases/` (2026-10-13).
+- [ ] Encryption path is untested since both cases went public; `make_preview.py --passphrase` exists but
+      has not been exercised on a real encrypted case.
 - [ ] Nice-to-haves: per-case camera presets, side-by-side comparison of two cases,
       vector glyphs, volume (not just surface) export, pause-on-hover frame tooltip.
 
 ## Headless check (no browser UI)
 Chrome's `--screenshot` with `--virtual-time-budget` captures before WebCrypto/rAF finish.
-A small DevTools-protocol driver that waits real time works:
-`python3 cdp_shot.py <url> out.png <seconds>` (uses `websockets`; copy from the
-2026-10-08 session scratchpad or rewrite: Page.navigate → wait → Page.captureScreenshot).
+`exporter/make_preview.py` contains a reusable DevTools-protocol driver (`Chrome` class: navigate,
+`js()`, `shot()`); the viewer exposes `window.fem.setFrame` and the `ui=0`, `zoom=`, `autoplay=0`
+URL params for it. For a one-off screenshot of any URL the older `cdp_shot.py` pattern
+(Page.navigate → wait real seconds → Page.captureScreenshot) is the same code minus the frame loop.
+Run with plain `python3`, not `python3 -I` (websockets lives in user site-packages).
