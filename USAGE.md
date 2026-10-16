@@ -26,7 +26,8 @@ plus its von Mises and trace variants.
 
 ## For the owner (adding a run, sharing)
 
-Add a run (FEBio `model.*.vtk` series, 40 frames evenly spaced in time, encrypted):
+Add a run (FEBio `model.*.vtk` series, 40 frames evenly spaced in time; drop `--encrypt --passphrase CODE`
+for a public case, which is what both current cases are):
 
 ```bash
 cd ~/doc/Phd/fem_web_viewer

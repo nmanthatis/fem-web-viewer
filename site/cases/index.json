@@ -15,8 +15,9 @@
    "Lagrange_strain|trace",
    "Lagrange_strain|p1"
   ],
-  "encrypted": true,
-  "sizeMB": 33.9
+  "encrypted": false,
+  "sizeMB": 33.9,
+  "preview": true
  },
  {
   "name": "echo_tv_D-02-S-03-b_t0032",

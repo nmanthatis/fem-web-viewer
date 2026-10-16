@@ -21,8 +21,8 @@ Usage notes for collaborators and for adding/sharing runs: `USAGE.md` (added 202
 ## Published cases
 - **Clip in RV** › `clip_rv4mmHg` — `biv_valve_pipeline/runs/01_clip_rv4mmHg` (model.*.vtk, 404 solver
   steps → 40 frames linear in time, 0–0.2455 s), stress + Lagrange strain (vm/trace/p1), parts
-  0–6 named (part 7 = 97 non-surface cells, dropped). Encrypted; passphrase is the lab name code
-  the user chose (not written here). Share link = viewer URL + `#k=<code>`.
+  0–6 named (part 7 = 97 non-surface cells, dropped). Re-exported **unencrypted** on 2026-10-16 at the
+  user's request (from `vtk_by_time/`, now 65 solver files); default view stress vm 0–80 kPa; preview assets rendered.
 
 - **Echo valves** › `echo_tv_D-02-S-03-b_t0032` —
   `valve_in_febio/runs/echo_tv_realvalves/chordae_D-02-S-03-b/mech_cusp_pm/pareto_search/rerun_t0032_allframes`
