@@ -39,7 +39,9 @@ FEBio runs use mm / kPa / mN / s / kg, so all stress fields are in kPa.
 ## Published cases (both public, no passphrase)
 - **Clip in RV** › `clip_rv4mmHg` — `biv_valve_pipeline/runs/01_clip_rv4mmHg/vtk_by_time/model.*.vtk`
   (65 solver files → 40 frames, 0–0.2455 s), stress + Lagrange strain, parts 0–6 named (part 7 =
-  97 non-surface cells, dropped), 33.9 MB. Default view: stress vm, viridis, 0–80 kPa. Was encrypted
+  97 non-surface cells, dropped), 33.9 MB. Default view: stress vm, viridis, 0–80 kPa; start + thumbnail pose = atrial view down the tied
+  annulus (absolute camera in meta.json: valve z axis, up = valve +y rotated by the 82° rz of
+  `coupling.json`, annulus centroid = ring_centroid_raw + translation). Was encrypted
   until 2026-10-16 (re-exported plain at the user's request).
 - **Echo valves / D-02-S-03-b** › `echo_tv_D-02-S-03-b_t0032` ("Baseline chordae (t0032)") —
   `valve_in_febio/runs/echo_tv_realvalves/chordae_D-02-S-03-b/mech_cusp_pm/pareto_search/rerun_t0032_allframes`
