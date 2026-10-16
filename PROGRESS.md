@@ -1,60 +1,59 @@
 # fem_web_viewer — progress
 
+## What it is
+A static website for sharing interactive 3D animations of FEM results. A Python exporter
+(`exporter/export_case.py`) turns a VTK time series (FEBio `model.*.vtk`, ParaView `.pvd`, …) into a
+compact binary bundle under `site/cases/<name>/`; a three.js page (`site/viewer.html`) plays it in the
+browser with orbit/zoom, a timeline, scalar colormaps, clip planes, part toggles and screenshots.
+Published from the public repo https://github.com/nmanthatis/fem-web-viewer to
+https://nmanthatis.github.io/fem-web-viewer/ (GitHub Actions deploys Pages on every push to main).
+Day-to-day instructions are in `USAGE.md`; the full reference is `README.md`.
+
 ## Rules
-See CLAUDE.md: exported frames are always evenly spaced in solution time.
+See `CLAUDE.md`: exported frames are always evenly spaced in solution time (never `--raw-steps` for
+published cases); FEBio VTK files are reference coordinates + `displacement`, warped by the exporter.
+FEBio runs use mm / kPa / mN / s / kg, so all stress fields are in kPa.
 
-## Status (2026-10-16)
-Both cases are public (no encryption) with link previews; share `…/cases/NAME/` links in chats.
-Session 2026-10-15/16 added: chordae rods, per-case view defaults (`defaults` in meta.json,
-`--default-*` exporter flags), cache-busting in `publish.sh` (stamps local JS/CSS on every publish),
-`make_preview.py`. Nothing pending from the user.
+## What works (as of 2026-10-16)
+- Export: linear-time resampling (`--frames N`), part filtering and naming, tensor invariants
+  (vm / trace / p1), decimation, AES-GCM encryption (`--encrypt`), FEBio discrete elements (chordae)
+  as rods (`--lines Chordae --line-radius r`), per-case view defaults
+  (`--default-field/--default-cmap/--default-range`, stored as `defaults` in `meta.json`).
+- Viewer: everything above plus instanced-cylinder rods, URL state (field, cmap, clip planes, hidden
+  parts incl. `hide=rods`, frame, `zoom=`, `ui=0`), transparent-background PNG screenshots,
+  light/dark theme.
+- Link previews: `exporter/make_preview.py <name>` renders `preview.jpg` (Open Graph card),
+  `preview.gif` + `preview.mp4` (animation, 800 px) and a share page `site/cases/<name>/index.html`
+  that carries the OG tags and forwards into the viewer. Share `…/cases/<name>/` in chats; attach the
+  GIF/MP4 for motion (chat apps only show static cards). Gallery cards show the thumbnail, GIF on hover.
+- `publish.sh` stamps local JS/CSS references with a version on every publish (fixed a stale-cache
+  "Could not load case" error on 2026-10-15).
 
-## Status (2026-10-15)
-Link previews: `exporter/make_preview.py NAME` renders preview.jpg/gif/mp4 + an OG share page
-`site/cases/NAME/index.html` (headless Chrome via DevTools protocol, viewer `ui=0&zoom=` params and
-`window.fem.setFrame` hook). Share `…/cases/NAME/` for a thumbnail in chats. Done for the echo TV case.
-Viewer now draws FEBio discrete elements (chordae) as instanced cylinder rods (`--lines` in the
-exporter; rod radius fixed per case in meta.json; `hide=rods` URL param). Second real case published.
-
-## Status (2026-10-08)
-Working end to end locally: exporter (`exporter/export_case.py`) → `site/cases/*` → three.js
-viewer (`site/viewer.html`) with timeline, colormaps, clip planes, encryption, gallery.
-Published: https://github.com/nmanthatis/fem-web-viewer → live at https://nmanthatis.github.io/fem-web-viewer/
-(public repo, Pages deployed by `.github/workflows/pages.yml` on every push to main).
-
-Usage notes for collaborators and for adding/sharing runs: `USAGE.md` (added 2026-10-12).
-
-## Published cases
-- **Clip in RV** › `clip_rv4mmHg` — `biv_valve_pipeline/runs/01_clip_rv4mmHg` (model.*.vtk, 404 solver
-  steps → 40 frames linear in time, 0–0.2455 s), stress + Lagrange strain (vm/trace/p1), parts
-  0–6 named (part 7 = 97 non-surface cells, dropped). Re-exported **unencrypted** on 2026-10-16 at the
-  user's request (from `vtk_by_time/`, now 65 solver files); default view stress vm 0–80 kPa; preview assets rendered.
-
+## Published cases (both public, no passphrase)
+- **Clip in RV** › `clip_rv4mmHg` — `biv_valve_pipeline/runs/01_clip_rv4mmHg/vtk_by_time/model.*.vtk`
+  (65 solver files → 40 frames, 0–0.2455 s), stress + Lagrange strain, parts 0–6 named (part 7 =
+  97 non-surface cells, dropped), 33.9 MB. Default view: stress vm, viridis, 0–80 kPa. Was encrypted
+  until 2026-10-16 (re-exported plain at the user's request).
 - **Echo valves** › `echo_tv_D-02-S-03-b_t0032` —
   `valve_in_febio/runs/echo_tv_realvalves/chordae_D-02-S-03-b/mech_cusp_pm/pareto_search/rerun_t0032_allframes`
-  (t0032.*.vtk, 2017 steps → 100 frames linear in time, 0–0.1 s, 20 mmHg ramp 0–0.05 s then hold).
-  Leaflets (part 0, quads) + 49 chordae as gray rods r = 0.07 mm; fields displacement, stress,
-  Lagrange strain, shell thickness. 8.9 MB, **not encrypted** (user's choice). Matches the user's
-  ParaView macro (warp by displacement, quads only, smooth normals).
+  (2017 steps → 100 frames, 0–0.1 s; 20 mmHg ramp 0–0.05 s then hold). Leaflets (part 0) + 49 chordae
+  as gray rods r = 0.07 mm; displacement, stress, Lagrange strain, shell thickness; 8.9 MB. Default
+  view: stress p1, coolwarm, 20–70 kPa. Matches the user's ParaView macro (warp by displacement,
+  quads only, smooth normals).
 
-## Test cases
-Demo cases (`sphere_demo*`, `leaflet_frame40`) were removed from `site/cases` on 2026-10-13; the
-synthetic sphere generator is in git history if a test case is needed again.
+## Tried / set aside
+- Demo cases (`sphere_demo*`, `leaflet_frame40`) removed from the site on 2026-10-13; their synthetic
+  input frames moved to `archive/test_data/` on 2026-10-16 (generator only in git history).
+- Chrome `--screenshot --virtual-time-budget` for headless checks: captures before WebCrypto/rAF
+  finish. Replaced by the DevTools-protocol driver now inside `make_preview.py` (`Chrome` class;
+  `window.fem.setFrame` hook in the viewer). Run with plain `python3`, not `-I`.
+- Black chordae rods: invisible on the dark theme; settled on gray.
+- The Claude-in-Chrome extension was not connected in these sessions; headless Chrome covered it.
 
-## Next steps
-- [x] First real case exported (2026-10-08, clip_rv4mmHg).
-- [ ] Manifest (`cases.toml` + `build_all.py`) so re-exports are one command — offered, not yet requested.
-- [x] GitHub repo + Pages (2026-10-08).
-- [x] Delete demo cases from `site/cases/` (2026-10-13).
-- [ ] Encryption path is untested since both cases went public; `make_preview.py --passphrase` exists but
-      has not been exercised on a real encrypted case.
-- [ ] Nice-to-haves: per-case camera presets, side-by-side comparison of two cases,
-      vector glyphs, volume (not just surface) export, pause-on-hover frame tooltip.
-
-## Headless check (no browser UI)
-Chrome's `--screenshot` with `--virtual-time-budget` captures before WebCrypto/rAF finish.
-`exporter/make_preview.py` contains a reusable DevTools-protocol driver (`Chrome` class: navigate,
-`js()`, `shot()`); the viewer exposes `window.fem.setFrame` and the `ui=0`, `zoom=`, `autoplay=0`
-URL params for it. For a one-off screenshot of any URL the older `cdp_shot.py` pattern
-(Page.navigate → wait real seconds → Page.captureScreenshot) is the same code minus the frame loop.
-Run with plain `python3`, not `python3 -I` (websockets lives in user site-packages).
+## Status and next step
+Everything requested is published and documented; nothing is pending from the user.
+Logical next step when a new run arrives: `export_case.py` → `make_preview.py` → `publish.sh`
+(three commands; a `cases.toml` manifest + `build_all.py` would make re-exports one command, offered
+but not requested). Open nice-to-haves: per-case camera presets, side-by-side comparison, vector
+glyphs, volume export. The encryption path is untested since both cases went public
+(`make_preview.py --passphrase` exists but has not been exercised on a real encrypted case).

@@ -8,3 +8,5 @@ test_data/
 *.vtu
 *.vtp
 *.pvd
+# archived experiments / old test data (kept locally, not published)
+archive/
