@@ -50,6 +50,15 @@ FEBio runs use mm / kPa / mN / s / kg, so all stress fields are in kPa.
   view: stress p1, coolwarm, 20–70 kPa. Matches the user's ParaView macro (warp by displacement,
   quads only, smooth normals).
 
+- **Echo valves / D-02-S-03-b** › `echo_tv_D-02-S-03-b_belly_col0PM4_clamped_p23` ("Belly chordae + PM4, clamped
+  annulus, 23 mmHg (identification valve)") — `stiffness_from_image/runs/pm_viewer_echo_clamped_p23_x0`
+  (12 solver frames at 0.01 s -> 100 frames; uniform neo-Hookean G 29.5 kPa, t 0.6725 mm, 82 chordae rods). 2026-11-04.
+- **Echo valves / D-03-S-02** › `echo_tv_D-03-S-02_t0043` ("Rule-based chordae, Pareto trial 43 (closes)") —
+  `stiffness_from_image/runs/pm_viewer_echo_D-03-S-02_t43` (12 frames -> 100; 49 chordae; 20 mmHg). 2026-11-04.
+- **Echo valves / D-07-S-01** › `echo_tv_D-07-S-01_t0046` ("Rule-based chordae, Pareto trial 46 (does not close)") —
+  `stiffness_from_image/runs/pm_viewer_echo_D-07-S-01_t46` (11 frames -> 100; 47 chordae; 20 mmHg). 2026-11-04.
+  All three: same `echo_valve` preset and default view as the baseline case; previews rendered.
+
 ## Tried / set aside
 - Demo cases (`sphere_demo*`, `leaflet_frame40`) removed from the site on 2026-10-13; their synthetic
   input frames moved to `archive/test_data/` on 2026-10-16 (generator only in git history).

@@ -40,5 +40,71 @@
   "encrypted": false,
   "sizeMB": 8.9,
   "preview": true
+ },
+ {
+  "name": "echo_tv_D-02-S-03-b_belly_col0PM4_clamped_p23",
+  "title": "Belly chordae + PM4, clamped annulus, 23 mmHg (identification valve)",
+  "description": "Patient tricuspid valve D-02-S-03-b from echo. Pareto trial 32 (49 free-edge chordae, 3 papillary points) plus 24 belly chordae and a 4th papillary point under commissure col 0 (82 chordae), annulus rotation clamped, pressure ramped smoothly to 23 mmHg over 0-0.05 s then held to 0.1 s. The geometry used for the (G, t) identification; this solve is the pipeline's uniform neo-Hookean leaflet at the box centre, G = 29.5 kPa, t = 0.6725 mm.",
+  "group": "Echo valves/D-02-S-03-b",
+  "nFrames": 100,
+  "nVerts": 2004,
+  "nTris": 3800,
+  "fields": [
+   "displacement|mag",
+   "stress|vm",
+   "stress|trace",
+   "stress|p1",
+   "Lagrange_strain|vm",
+   "Lagrange_strain|trace",
+   "Lagrange_strain|p1",
+   "shell_thickness"
+  ],
+  "encrypted": false,
+  "sizeMB": 8.9,
+  "preview": true
+ },
+ {
+  "name": "echo_tv_D-03-S-02_t0043",
+  "title": "Rule-based chordae, Pareto trial 43 (closes)",
+  "description": "Patient tricuspid valve D-03-S-02 from echo. Rule-based free-edge chordae (49 chordae to 3 papillary points) from the 60-trial Pareto search, trial 43 on the feasible front (open area 2.3 mm2, contact 344 mm2 in the search). Pressure ramped smoothly to 20 mmHg over 0-0.05 s then held to 0.1 s, annulus pinned. Uniform neo-Hookean leaflet, G = 29.5 kPa, t = 0.6725 mm.",
+  "group": "Echo valves/D-03-S-02",
+  "nFrames": 100,
+  "nVerts": 2003,
+  "nTris": 3800,
+  "fields": [
+   "displacement|mag",
+   "stress|vm",
+   "stress|trace",
+   "stress|p1",
+   "Lagrange_strain|vm",
+   "Lagrange_strain|trace",
+   "Lagrange_strain|p1",
+   "shell_thickness"
+  ],
+  "encrypted": false,
+  "sizeMB": 8.9,
+  "preview": true
+ },
+ {
+  "name": "echo_tv_D-07-S-01_t0046",
+  "title": "Rule-based chordae, Pareto trial 46 (does not close)",
+  "description": "Patient tricuspid valve D-07-S-01 from echo. Rule-based free-edge chordae (47 chordae to 3 papillary points), trial 46 of a 60-trial Pareto search in which no trial met the closure constraint: smallest orifice (open area 88 mm2, contact 146 mm2 in the search), X-shaped regurgitant gap. Pressure ramped smoothly to 20 mmHg over 0-0.05 s then held to 0.1 s, annulus pinned. Uniform neo-Hookean leaflet, G = 29.5 kPa, t = 0.6725 mm.",
+  "group": "Echo valves/D-07-S-01",
+  "nFrames": 100,
+  "nVerts": 2003,
+  "nTris": 3800,
+  "fields": [
+   "displacement|mag",
+   "stress|vm",
+   "stress|trace",
+   "stress|p1",
+   "Lagrange_strain|vm",
+   "Lagrange_strain|trace",
+   "Lagrange_strain|p1",
+   "shell_thickness"
+  ],
+  "encrypted": false,
+  "sizeMB": 8.9,
+  "preview": true
  }
 ]
