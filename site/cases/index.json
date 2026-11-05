@@ -64,6 +64,28 @@
   "preview": true
  },
  {
+  "name": "echo_tv_D-03-S-02_t0043_fan5_L3",
+  "title": "Fan chordae (5 branches, 3 mm), trial 43",
+  "description": "Patient tricuspid valve D-03-S-02 from echo, Pareto trial 43 chordae rebuilt as fans: each of the 49 chordae is a trunk from the papillary point to a free branch node 3 mm off the leaflet (original stiffness 15 mN/mm and slack kept) plus five branches (15 mN/mm each, no slack) into a 5-node patch centred one row in from the original free-edge node; effective chord stiffness 12.5 mN/mm. Free-edge element stretch drops from 1.51 median / 3.37 max to 1.11 / 1.42 (leaflet body 1.30); closure unchanged (open area 2.4 mm2). Pressure ramped smoothly to 20 mmHg over 0-0.05 s then held to 0.1 s, annulus pinned. Uniform neo-Hookean leaflet, G = 29.5 kPa, t = 0.6725 mm. Rods = trunks and branches.",
+  "group": "Echo valves/D-03-S-02",
+  "nFrames": 100,
+  "nVerts": 2052,
+  "nTris": 3800,
+  "fields": [
+   "displacement|mag",
+   "stress|vm",
+   "stress|trace",
+   "stress|p1",
+   "Lagrange_strain|vm",
+   "Lagrange_strain|trace",
+   "Lagrange_strain|p1",
+   "shell_thickness"
+  ],
+  "encrypted": false,
+  "sizeMB": 9.1,
+  "preview": true
+ },
+ {
   "name": "echo_tv_D-03-S-02_t0043",
   "title": "Rule-based chordae, Pareto trial 43 (closes)",
   "description": "Patient tricuspid valve D-03-S-02 from echo. Rule-based free-edge chordae (49 chordae to 3 papillary points) from the 60-trial Pareto search, trial 43 on the feasible front (open area 2.3 mm2, contact 344 mm2 in the search). Pressure ramped smoothly to 20 mmHg over 0-0.05 s then held to 0.1 s, annulus pinned. Uniform neo-Hookean leaflet, G = 29.5 kPa, t = 0.6725 mm.",
