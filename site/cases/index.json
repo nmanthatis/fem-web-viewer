@@ -20,6 +20,26 @@
   "preview": true
  },
  {
+  "name": "septal_clip_rv4mmHg_midplane",
+  "title": "Septal-aligned valve + clip in BiV, RV 4 mmHg",
+  "description": "Run 03_septal_clip_rv4mmHg_midplane: valve rotated to ann_rz 140.7 deg (septal leaflet on the septum; clip_rv4mmHg uses 82 deg), A1S2 clip, annulus tied to the septal-aligned 3 mm diseased wall, roller plane at mid height, RV + trunk pressurized to 4 mmHg from t = 0.16 s. Run ends at t = 0.224 s.",
+  "group": "Clip in RV",
+  "nFrames": 40,
+  "nVerts": 23085,
+  "nTris": 45274,
+  "fields": [
+   "stress|vm",
+   "stress|trace",
+   "stress|p1",
+   "Lagrange_strain|vm",
+   "Lagrange_strain|trace",
+   "Lagrange_strain|p1"
+  ],
+  "encrypted": false,
+  "sizeMB": 33.8,
+  "preview": true
+ },
+ {
   "name": "echo_tv_D-02-S-03-b_t0032",
   "title": "Baseline chordae (t0032)",
   "description": "Patient tricuspid valve D-02-S-03-b reconstructed from echo. 49 chordae to 3 papillary points, ventricular pressure ramped smoothly to 20 mmHg over 0-0.05 s then held to 0.1 s.",
