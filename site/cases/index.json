@@ -1,5 +1,44 @@
 [
  {
+  "name": "biv_wall_ocs12_diseased",
+  "title": "OCS12 diseased: BiV wall (approved)",
+  "description": "Solid geometry, no mesh. Septal-aligned 3 mm build around the diseased OCS12 annulus (384 points, black ring): ann_rz 140.7 deg, LV endo 32 mm, wedge height 2.74 mm (45-degree rule). This is the approved wall the coupled runs use; it builds and meshes with all 384 annulus points imposed.",
+  "group": "BiV walls from the OCS valves",
+  "nFrames": 1,
+  "nVerts": 6320,
+  "nTris": 9898,
+  "fields": [],
+  "encrypted": false,
+  "sizeMB": 0.2,
+  "preview": true
+ },
+ {
+  "name": "biv_wall_ocs13",
+  "title": "OCS13: BiV wall (solid only, does not mesh yet)",
+  "description": "Solid geometry, no mesh. Septal-aligned 3 mm build around the OCS13 annulus (307 points, black ring): ann_rz 122.2 deg, LV endo 32 mm, wedge height raised to 4.34 mm (--wedge-below-annulus 1.0) because this annulus dips 3.3 mm below its mean plane; healthy-size RVOT placement. The solid is complete, but imprinting the annulus points along about 7 mm next to the septum-trunk corner breaks the tet mesh (2026-11-13).",
+  "group": "BiV walls from the OCS valves",
+  "nFrames": 1,
+  "nVerts": 6431,
+  "nTris": 10432,
+  "fields": [],
+  "encrypted": false,
+  "sizeMB": 0.2,
+  "preview": true
+ },
+ {
+  "name": "biv_wall_ocs14",
+  "title": "OCS14: BiV wall (solid only, does not mesh yet)",
+  "description": "Solid geometry, no mesh. Septal-aligned 3 mm build around the OCS14 annulus (261 points, black ring): ann_rz 132.8 deg, LV endo 32 mm, wedge height raised to 4.45 mm (--wedge-below-annulus 0.8), RVOT placement of the approved OCS12 wall. The solid is complete; the build fails later at the annulus imprint (2026-11-11). The variant with the healthy-size RVOT placement lost the pulmonary trunk and is not shown.",
+  "group": "BiV walls from the OCS valves",
+  "nFrames": 1,
+  "nVerts": 6232,
+  "nTris": 10159,
+  "fields": [],
+  "encrypted": false,
+  "sizeMB": 0.2,
+  "preview": true
+ },
+ {
   "name": "clip_rv4mmHg",
   "title": "Diseased valve + clip in BiV, RV 4 mmHg",
   "description": "Run 01_clip_rv4mmHg: A1S2 clip, annulus tied to the 3 mm diseased wall, RV + trunk pressurized to 4 mmHg (t = 0.16\u20130.21 s).",

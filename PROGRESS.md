@@ -43,6 +43,11 @@ FEBio runs use mm / kPa / mN / s / kg, so all stress fields are in kPa.
   annulus (absolute camera in meta.json: valve z axis, up = valve +y rotated by the 82° rz of
   `coupling.json`, annulus centroid = ring_centroid_raw + translation). Was encrypted
   until 2026-10-16 (re-exported plain at the user's request).
+- **Clip in RV** › `septal_clip_rv4mmHg_midplane` ("Septal-aligned valve + clip in BiV, RV 4 mmHg") —
+  `biv_valve_pipeline/runs/03_septal_clip_rv4mmHg_midplane/vtk_by_time/model.*.vtk` (51 solver files → 40 frames,
+  0–0.224 s, where the run ends), valve at ann_rz 140.7° (septal leaflet on the septum) on the septal-aligned 3 mm wall,
+  roller plane at mid height. Same fields, parts and default view as `clip_rv4mmHg`; atrial start pose with up rotated
+  by 140.7°. 33.8 MB, preview rendered. 2026-11-10.
 - **Echo valves / D-02-S-03-b** › `echo_tv_D-02-S-03-b_t0032` ("Baseline chordae (t0032)") —
   `valve_in_febio/runs/echo_tv_realvalves/chordae_D-02-S-03-b/mech_cusp_pm/pareto_search/rerun_t0032_allframes`
   (2017 steps → 100 frames, 0–0.1 s; 20 mmHg ramp 0–0.05 s then hold). Leaflets (part 0) + 49 chordae
@@ -57,6 +62,33 @@ FEBio runs use mm / kPa / mN / s / kg, so all stress fields are in kPa.
   `stiffness_from_image/runs/pm_viewer_echo_D-03-S-02_t43` (12 frames -> 100; 49 chordae; 20 mmHg). 2026-11-04.
 - **Echo valves / D-07-S-01** › `echo_tv_D-07-S-01_t0046` ("Rule-based chordae, Pareto trial 46 (does not close)") —
   `stiffness_from_image/runs/pm_viewer_echo_D-07-S-01_t46` (11 frames -> 100; 47 chordae; 20 mmHg). 2026-11-04.
+- **BiV walls from the OCS valves** (2026-11-13; published public, no passphrase, at the user's request): three static
+  cases, solid geometry only (no mesh), one frame, no fields; parts LV endocardium / RV endocardium / pulmonary trunk
+  lumen / outer wall, annulus as a rod ring (r 0.25 mm). Source = each build's `checkpoint_solid.cub5` (wall solid
+  after all booleans, before the annulus imprint) in `biventricular/biv/biv_v2/output/runs/`:
+  `biv_wall_ocs12_diseased` <- `2026-10-08_1117_diseased-septal-singletool-3mm` (the approved 3 mm wall);
+  `biv_wall_ocs13` <- `2026-11-13_1405_wavetest-ocs13-flat1.0` (wedge floor 1.0, healthy-size RVOT placement);
+  `biv_wall_ocs14` <- `2026-11-11_1656_ocs14-var-diseasedseptal-lv32.0` (wedge floor 0.8, OCS12-diseased RVOT
+  placement; the 1650 build with the healthy-size placement lost the trunk). OCS13/OCS14 solids do not mesh yet.
+  New tooling: `exporter/cubit_solid_to_vtu.py` runs `exporter/cubit/solid_facets.py` in Cubit batch to tessellate
+  each surface and assign it to the nearest of the build's *_ref volumes (flat cut faces and the wedge outer skin go
+  to the outer wall), and writes a .vtu with part_id + optional annulus line cells; then `export_case.py X.vtu
+  --parts 0,1,2,3 --lines Annulus --line-parts 9 --line-radius 0.25 --default-field none`, then
+  `exporter/annulus_camera.py NAME` (start + thumbnail pose straight down the annulus best-fit-plane normal from the
+  atrial (+z) side, frame centred on the projected model and fitted to 16:9; user's choice 2026-11-13) and
+  `make_preview.py NAME --frames 1`.
+- **Common orientation (2026-11-13, user):** every BiV case, walls and clip-in-RV runs alike, opens and previews with
+  the septal leaflet's centre (arc midpoint between its commissures, `geom_core.septal_alignment_rz`) at the top of
+  the screen, looking down the annulus from the atrial side. Septal-aligned builds (both OCS12 septal cases, OCS13,
+  OCS14) have the septal midpoint at 180 deg about the annulus centroid -> `--up-vec=-1,0,0`; `clip_rv4mmHg` (ann_rz
+  82) has it at 121.29 deg -> `--up-vec=-0.5194,0.8545,0`. Walls: `annulus_camera.py NAME --up-vec=...`. Clip cases
+  have no ring rods, so the OCS12 annulus (`pins/valve_diseased_deck/00_VALVE.inp` Annular_Nodes) is placed with each
+  run's `coupling.json` (Rz about ring_centroid_raw, then + translation) and passed as `--ring-json`; they then get
+  the same framing as the walls (centred on the whole model, fitted to 16:9). Pass the vector with `=` (a leading
+  minus is read as a flag otherwise). All five previews re-rendered. (`--keep-pose` exists to rotate only screen-up.) Annulus rings: `rv_wedge_rings.build_rv_wedge_rings(...)['inner'][3]` with each run's
+  params.json knobs.
+- **Echo valves / D-03-S-02** › `echo_tv_D-03-S-02_t0043_fan5_L3` ("Fan chordae (5 branches, 3 mm), trial 43") —
+  `stiffness_from_image/runs/fan_D-03-S-02/L3` (12 frames -> 100; 49 trunks + 245 branches = 294 rods; 20 mmHg). 2026-11-05.
   All three: same `echo_valve` preset and default view as the baseline case; previews rendered.
 
 ## Tried / set aside

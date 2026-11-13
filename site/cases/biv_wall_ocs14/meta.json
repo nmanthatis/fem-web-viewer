@@ -1,0 +1,109 @@
+{
+ "name": "biv_wall_ocs14",
+ "title": "OCS14: BiV wall (solid only, does not mesh yet)",
+ "description": "Solid geometry, no mesh. Septal-aligned 3 mm build around the OCS14 annulus (261 points, black ring): ann_rz 132.8 deg, LV endo 32 mm, wedge height raised to 4.45 mm (--wedge-below-annulus 0.8), RVOT placement of the approved OCS12 wall. The solid is complete; the build fails later at the annulus imprint (2026-11-11). The variant with the healthy-size RVOT placement lost the pulmonary trunk and is not shown.",
+ "nFrames": 1,
+ "nVerts": 6232,
+ "nTris": 10159,
+ "times": [
+  0.0
+ ],
+ "linearTime": true,
+ "parts": [
+  {
+   "id": 0,
+   "name": "LV endocardium",
+   "start": 0,
+   "count": 2004
+  },
+  {
+   "id": 1,
+   "name": "RV endocardium",
+   "start": 2004,
+   "count": 5745
+  },
+  {
+   "id": 2,
+   "name": "Pulmonary trunk lumen",
+   "start": 7749,
+   "count": 11076
+  },
+  {
+   "id": 3,
+   "name": "Outer wall (epicardium + cut faces)",
+   "start": 18825,
+   "count": 11652
+  }
+ ],
+ "lines": {
+  "name": "Annulus",
+  "count": 261,
+  "radius": 0.25
+ },
+ "fields": [],
+ "defaults": {
+  "field": "none",
+  "camera": {
+   "pos": [
+    36.526,
+    6.995,
+    172.358
+   ],
+   "target": [
+    34.664,
+    7.377,
+    52.442
+   ],
+   "up": [
+    -0.9999,
+    -0.0,
+    0.0155
+   ]
+  },
+  "thumbCamera": {
+   "pos": [
+    36.526,
+    6.995,
+    172.358
+   ],
+   "target": [
+    34.664,
+    7.377,
+    52.442
+   ],
+   "up": [
+    -0.9999,
+    -0.0,
+    0.0155
+   ]
+  }
+ },
+ "bbox": [
+  [
+   -6.122686862945557,
+   -24.939245223999023,
+   -14.98056411743164
+  ],
+  [
+   75.37028503417969,
+   39.70475387573242,
+   73.02133178710938
+  ]
+ ],
+ "offsets": {
+  "indices": [
+   0,
+   121908
+  ],
+  "positions": [
+   121908,
+   74784
+  ],
+  "lines": [
+   196692,
+   2088
+  ]
+ },
+ "byteLength": 198780,
+ "encrypted": false
+}

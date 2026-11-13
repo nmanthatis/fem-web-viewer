@@ -1,0 +1,109 @@
+{
+ "name": "biv_wall_ocs12_diseased",
+ "title": "OCS12 diseased: BiV wall (approved)",
+ "description": "Solid geometry, no mesh. Septal-aligned 3 mm build around the diseased OCS12 annulus (384 points, black ring): ann_rz 140.7 deg, LV endo 32 mm, wedge height 2.74 mm (45-degree rule). This is the approved wall the coupled runs use; it builds and meshes with all 384 annulus points imposed.",
+ "nFrames": 1,
+ "nVerts": 6320,
+ "nTris": 9898,
+ "times": [
+  0.0
+ ],
+ "linearTime": true,
+ "parts": [
+  {
+   "id": 0,
+   "name": "LV endocardium",
+   "start": 0,
+   "count": 2004
+  },
+  {
+   "id": 1,
+   "name": "RV endocardium",
+   "start": 2004,
+   "count": 5625
+  },
+  {
+   "id": 2,
+   "name": "Pulmonary trunk lumen",
+   "start": 7629,
+   "count": 9846
+  },
+  {
+   "id": 3,
+   "name": "Outer wall (epicardium + cut faces)",
+   "start": 17475,
+   "count": 12219
+  }
+ ],
+ "lines": {
+  "name": "Annulus",
+  "count": 384,
+  "radius": 0.25
+ },
+ "fields": [],
+ "defaults": {
+  "field": "none",
+  "camera": {
+   "pos": [
+    31.678,
+    6.633,
+    194.749
+   ],
+   "target": [
+    30.692,
+    6.638,
+    52.102
+   ],
+   "up": [
+    -1.0,
+    -0.0,
+    0.0069
+   ]
+  },
+  "thumbCamera": {
+   "pos": [
+    31.678,
+    6.633,
+    194.749
+   ],
+   "target": [
+    30.692,
+    6.638,
+    52.102
+   ],
+   "up": [
+    -1.0,
+    -0.0,
+    0.0069
+   ]
+  }
+ },
+ "bbox": [
+  [
+   -17.564674377441406,
+   -26.23529815673828,
+   -38.79179000854492
+  ],
+  [
+   78.92749786376953,
+   39.51116180419922,
+   73.02133178710938
+  ]
+ ],
+ "offsets": {
+  "indices": [
+   0,
+   118776
+  ],
+  "positions": [
+   118776,
+   75840
+  ],
+  "lines": [
+   194616,
+   3072
+  ]
+ },
+ "byteLength": 197688,
+ "encrypted": false
+}
