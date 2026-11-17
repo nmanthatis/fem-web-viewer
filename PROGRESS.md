@@ -91,6 +91,11 @@ FEBio runs use mm / kPa / mN / s / kg, so all stress fields are in kPa.
   `stiffness_from_image/runs/fan_D-03-S-02/L3` (12 frames -> 100; 49 trunks + 245 branches = 294 rods; 20 mmHg). 2026-11-05.
   All three: same `echo_valve` preset and default view as the baseline case; previews rendered.
 
+- **PMs on the RV endocardium (tips fixed in space)** › `pm_ocs13_pm3split_rv4mmHg` (run 23), `pm_ocs14_pmsnap_rv4mmHg`
+  (run 24), `pm_ocs14_pm3free_rv4mmHg` (run 25) from `biv_valve_pipeline/runs/2x_*` (51 frames -> 40, chordae as rods 0.07,
+  stress + Lagrange strain, public). Septal-up atrial pose via `annulus_camera.py --ring-json` (valve AnnularNodes from the
+  deck) `--up-vec=-1,0,0`; previews rendered. 2026-11-16 (user request).
+
 ## Tried / set aside
 - Demo cases (`sphere_demo*`, `leaflet_frame40`) removed from the site on 2026-10-13; their synthetic
   input frames moved to `archive/test_data/` on 2026-10-16 (generator only in git history).
