@@ -194,7 +194,7 @@
   "description": "Run 23: OCS13 valve (OCS12 Posterior card on all leaflets) tied to the OCS13 3 mm wall; papillary tips at the user's PM3-split placement on the RV endocardium, fixed in space. Leaflet pressure 5.666 kPa by t 0.02 s, RV + trunk 4 mmHg over 0.05-0.08 s, ends t 0.1 s.",
   "group": "PMs on the RV endocardium (tips fixed in space)",
   "nFrames": 40,
-  "nVerts": 17175,
+  "nVerts": 17181,
   "nTris": 33628,
   "fields": [
    "stress|vm",
@@ -214,7 +214,7 @@
   "description": "Run 24: OCS14 valve (OCS12 Posterior card on all leaflets) tied to the OCS14 3 mm wall; papillary tips snapped to the nearest RV endocardium point, fixed in space. Leaflet pressure 5.666 kPa by t 0.02 s, RV + trunk 4 mmHg over 0.05-0.08 s, ends t 0.1 s.",
   "group": "PMs on the RV endocardium (tips fixed in space)",
   "nFrames": 40,
-  "nVerts": 13513,
+  "nVerts": 13518,
   "nTris": 26382,
   "fields": [
    "stress|vm",
@@ -234,7 +234,7 @@
   "description": "Run 25: OCS14 valve (OCS12 Posterior card on all leaflets) tied to the OCS14 3 mm wall; papillary tips at the user's placement with PM3 on the free wall, fixed in space. Leaflet pressure 5.666 kPa by t 0.02 s, RV + trunk 4 mmHg over 0.05-0.08 s, ends t 0.1 s.",
   "group": "PMs on the RV endocardium (tips fixed in space)",
   "nFrames": 40,
-  "nVerts": 13513,
+  "nVerts": 13518,
   "nTris": 26382,
   "fields": [
    "stress|vm",

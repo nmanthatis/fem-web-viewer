@@ -3,7 +3,7 @@
  "title": "OCS14, PM3 on the free wall (user placement), RV 4 mmHg",
  "description": "Run 25: OCS14 valve (OCS12 Posterior card on all leaflets) tied to the OCS14 3 mm wall; papillary tips at the user's placement with PM3 on the free wall, fixed in space. Leaflet pressure 5.666 kPa by t 0.02 s, RV + trunk 4 mmHg over 0.05-0.08 s, ends t 0.1 s.",
  "nFrames": 40,
- "nVerts": 13513,
+ "nVerts": 13518,
  "nTris": 26382,
  "times": [
   0.0,
@@ -670,37 +670,37 @@
   ],
   "positions": [
    316584,
-   6486240
+   6488640
   ],
   "lines": [
-   6802824,
+   6805224,
    520
   ],
   "field:stress|vm": [
-   6803344,
-   2162080
+   6805744,
+   2162880
   ],
   "field:stress|trace": [
-   8965424,
-   2162080
+   8968624,
+   2162880
   ],
   "field:stress|p1": [
-   11127504,
-   2162080
+   11131504,
+   2162880
   ],
   "field:Lagrange_strain|vm": [
-   13289584,
-   2162080
+   13294384,
+   2162880
   ],
   "field:Lagrange_strain|trace": [
-   15451664,
-   2162080
+   15457264,
+   2162880
   ],
   "field:Lagrange_strain|p1": [
-   17613744,
-   2162080
+   17620144,
+   2162880
   ]
  },
- "byteLength": 19775824,
+ "byteLength": 19783024,
  "encrypted": false
 }

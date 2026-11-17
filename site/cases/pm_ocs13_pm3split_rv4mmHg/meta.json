@@ -3,7 +3,7 @@
  "title": "OCS13, PM3 split (user placement), RV 4 mmHg",
  "description": "Run 23: OCS13 valve (OCS12 Posterior card on all leaflets) tied to the OCS13 3 mm wall; papillary tips at the user's PM3-split placement on the RV endocardium, fixed in space. Leaflet pressure 5.666 kPa by t 0.02 s, RV + trunk 4 mmHg over 0.05-0.08 s, ends t 0.1 s.",
  "nFrames": 40,
- "nVerts": 17175,
+ "nVerts": 17181,
  "nTris": 33628,
  "times": [
   0.0,
@@ -670,37 +670,37 @@
   ],
   "positions": [
    403536,
-   8244000
+   8246880
   ],
   "lines": [
-   8647536,
+   8650416,
    672
   ],
   "field:stress|vm": [
-   8648208,
-   2748000
+   8651088,
+   2748960
   ],
   "field:stress|trace": [
-   11396208,
-   2748000
+   11400048,
+   2748960
   ],
   "field:stress|p1": [
-   14144208,
-   2748000
+   14149008,
+   2748960
   ],
   "field:Lagrange_strain|vm": [
-   16892208,
-   2748000
+   16897968,
+   2748960
   ],
   "field:Lagrange_strain|trace": [
-   19640208,
-   2748000
+   19646928,
+   2748960
   ],
   "field:Lagrange_strain|p1": [
-   22388208,
-   2748000
+   22395888,
+   2748960
   ]
  },
- "byteLength": 25136208,
+ "byteLength": 25144848,
  "encrypted": false
 }
