@@ -96,6 +96,12 @@ FEBio runs use mm / kPa / mN / s / kg, so all stress fields are in kPa.
   stress + Lagrange strain, public). Septal-up atrial pose via `annulus_camera.py --ring-json` (valve AnnularNodes from the
   deck) `--up-vec=-1,0,0`; previews rendered. 2026-11-16 (user request).
 
+- **Clip release (standalone OCS14)** › `clip_release_ocs14_damp1` — `biv_valve_pipeline/runs/44_ocs14_inplace_round3_js/w0.2_damp1`
+  (60 solver files -> 40 frames, t 0-0.374), the furthest in-step release run (springs to ground, log k ramp from 1e4 at t 0.26,
+  damper c 1, ERROR at 0.377). Parts 0-5 named (Ground body and chordae cells dropped; chordae as rods 0.07). Stress 0-80 kPa
+  (as clip_rv4mmHg). Atrial pose with the septal leaflet up via `annulus_camera.py --ring-json` (deck AnnularNodes)
+  `--up-vec=0.6239,0.7814,0.0156`. 2026-11-17 (user request).
+
 ## Tried / set aside
 - Demo cases (`sphere_demo*`, `leaflet_frame40`) removed from the site on 2026-10-13; their synthetic
   input frames moved to `archive/test_data/` on 2026-10-16 (generator only in git history).
