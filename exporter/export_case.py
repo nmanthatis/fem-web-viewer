@@ -85,10 +85,16 @@ def _combine(ds):
 # ---------------------------------------------------------------- surface
 def to_surface(ds, parts=None):
     """Triangulated outer surface with vtkOriginalPointIds/CellIds attached."""
+    full_ids = None
     if parts is not None and "part_id" in ds.cell_data:
         keep = np.isin(np.asarray(ds.cell_data["part_id"]), parts)
         ds = ds.extract_cells(np.flatnonzero(keep))
+        # extract_surface below renumbers vtkOriginalPointIds against the extracted grid, not the full
+        # file: keep the full-file ids so 2-node cells (chordae) map to the right vertices
+        full_ids = np.asarray(ds.point_data["vtkOriginalPointIds"]).copy()
     surf = ds.extract_surface(pass_pointid=True, pass_cellid=True, algorithm="dataset_surface")
+    if full_ids is not None:
+        surf.point_data["vtkOriginalPointIds"] = full_ids[np.asarray(surf.point_data["vtkOriginalPointIds"])]
     return surf.triangulate()
 
 
