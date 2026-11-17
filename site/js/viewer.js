@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { TrackballControls } from 'three/addons/controls/TrackballControls.js';
-import { COLORMAPS, buildLUT, drawLegend, fmt } from './colormaps.js?v=20261117135146';
-import { decryptBundle, keyFromFragment } from './crypto.js?v=20261117135146';
+import { COLORMAPS, buildLUT, drawLegend, fmt } from './colormaps.js?v=20261117135442';
+import { decryptBundle, keyFromFragment } from './crypto.js?v=20261117135442';
 
 const $ = id => document.getElementById(id);
 const params = new URLSearchParams(location.search);
@@ -86,7 +86,10 @@ async function load() {
   S.meta = await mres.json();
   document.title = `${S.meta.title} – FEM Viewer`;
   $('ovTitle').innerHTML = `<b>${S.meta.title}</b>`;
-  let buf = await fetchWithProgress(base + (S.meta.encrypted ? 'data.bin.enc' : 'data.bin'), (p, got) => {
+  // meta.json is fetched no-store but data.bin may be cached (Pages max-age 600): tag it with the export's
+  // size/vertex count so a re-exported case never pairs new metadata with a stale buffer
+  const ver = `?v=${S.meta.byteLength || 0}-${S.meta.nVerts || 0}-${S.meta.nFrames || 0}`;
+  let buf = await fetchWithProgress(base + (S.meta.encrypted ? 'data.bin.enc' : 'data.bin') + ver, (p, got) => {
     $('ovBar').style.width = `${Math.round(p * 100)}%`; $('ovMsg').textContent = `${(got / 1e6).toFixed(1)} MB`;
   });
   if (S.meta.encrypted) {
