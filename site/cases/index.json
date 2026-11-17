@@ -187,5 +187,65 @@
   "encrypted": false,
   "sizeMB": 8.9,
   "preview": true
+ },
+ {
+  "name": "pm_ocs13_pm3split_rv4mmHg",
+  "title": "OCS13, PM3 split (user placement), RV 4 mmHg",
+  "description": "Run 23: OCS13 valve (OCS12 Posterior card on all leaflets) tied to the OCS13 3 mm wall; papillary tips at the user's PM3-split placement on the RV endocardium, fixed in space. Leaflet pressure 5.666 kPa by t 0.02 s, RV + trunk 4 mmHg over 0.05-0.08 s, ends t 0.1 s.",
+  "group": "PMs on the RV endocardium (tips fixed in space)",
+  "nFrames": 40,
+  "nVerts": 17175,
+  "nTris": 33628,
+  "fields": [
+   "stress|vm",
+   "stress|trace",
+   "stress|p1",
+   "Lagrange_strain|vm",
+   "Lagrange_strain|trace",
+   "Lagrange_strain|p1"
+  ],
+  "encrypted": false,
+  "sizeMB": 25.1,
+  "preview": true
+ },
+ {
+  "name": "pm_ocs14_pmsnap_rv4mmHg",
+  "title": "OCS14, PM tips snapped to the endocardium, RV 4 mmHg",
+  "description": "Run 24: OCS14 valve (OCS12 Posterior card on all leaflets) tied to the OCS14 3 mm wall; papillary tips snapped to the nearest RV endocardium point, fixed in space. Leaflet pressure 5.666 kPa by t 0.02 s, RV + trunk 4 mmHg over 0.05-0.08 s, ends t 0.1 s.",
+  "group": "PMs on the RV endocardium (tips fixed in space)",
+  "nFrames": 40,
+  "nVerts": 13513,
+  "nTris": 26382,
+  "fields": [
+   "stress|vm",
+   "stress|trace",
+   "stress|p1",
+   "Lagrange_strain|vm",
+   "Lagrange_strain|trace",
+   "Lagrange_strain|p1"
+  ],
+  "encrypted": false,
+  "sizeMB": 19.8,
+  "preview": true
+ },
+ {
+  "name": "pm_ocs14_pm3free_rv4mmHg",
+  "title": "OCS14, PM3 on the free wall (user placement), RV 4 mmHg",
+  "description": "Run 25: OCS14 valve (OCS12 Posterior card on all leaflets) tied to the OCS14 3 mm wall; papillary tips at the user's placement with PM3 on the free wall, fixed in space. Leaflet pressure 5.666 kPa by t 0.02 s, RV + trunk 4 mmHg over 0.05-0.08 s, ends t 0.1 s.",
+  "group": "PMs on the RV endocardium (tips fixed in space)",
+  "nFrames": 40,
+  "nVerts": 13513,
+  "nTris": 26382,
+  "fields": [
+   "stress|vm",
+   "stress|trace",
+   "stress|p1",
+   "Lagrange_strain|vm",
+   "Lagrange_strain|trace",
+   "Lagrange_strain|p1"
+  ],
+  "encrypted": false,
+  "sizeMB": 19.8,
+  "preview": true
  }
 ]
