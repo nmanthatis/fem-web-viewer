@@ -102,6 +102,29 @@ FEBio runs use mm / kPa / mN / s / kg, so all stress fields are in kPa.
   (as clip_rv4mmHg). Atrial pose with the septal leaflet up via `annulus_camera.py --ring-json` (deck AnnularNodes)
   `--up-vec=0.6239,0.7814,0.0156`. 2026-11-17 (user request).
 
+- **Clip in RV: chordae added, "saw-teeth" diagnosed** (2026-11-17, user request) — `clip_rv4mmHg` (run 01) and
+  `septal_clip_rv4mmHg_midplane` (run 03) now show the 97 chordae as rods (r 0.07). Their VTK frames
+  (`vtk_by_time/model.*.vtk`) are no longer on disk, so they could not be re-exported: the rods were added to the
+  published bundles with the new `exporter/add_lines_from_feb.py` (DiscreteSet `Chordae` from each run's `model.feb`;
+  the 97 leaflet ends match leaflet surface vertices of frame 0 to 5e-5 mm, the 7 tips of `PapillaryNodes` (zero
+  displacement in the deck) are appended at their deck coordinates). Same layout as `export_case.py --lines`; camera,
+  title, description, group, parts and colour defaults unchanged; previews re-rendered. The **saw-teeth** along the
+  annulus are not chordae and are not an export error: they are the old 3 mm diseased wall's own mesh (part 6), whose
+  384 imprinted annulus nodes are fanned to the coarse wall nodes by sliver triangles (median edge ratio 7 vs 1.1
+  elsewhere) and carry 15-22 kPa against ~1 kPa on the rest of the wall, so each fan renders as a light tooth. Visible
+  in a wall-only render, absent in a leaflet-only render; the OCS13/OCS14 walls (edge ratio 1.7) do not show them.
+  The rods do not remove them; options left to the user (hide the wall, a separate wall colour range, or a remeshed
+  wall annulus band).
+- **PMs on the RV endocardium (lowered tips, fixed in space)** › `pm_ocs12_lowered_fixed` (run 54, deck of run 06,
+  tips of run 51 r3), `pm_ocs13_lowered_fixed` (run 55, deck of run 23, tips of run 52 r3), `pm_ocs14_lowered_fixed`
+  (run 56, deck of run 25, tips of run 53 r1) from `biv_valve_pipeline/runs/5x_*_lowerpm_fixed` (50/51/51 frames -> 40;
+  run 54's last frame is t 0.098). Same recipe as runs 23-25: stress + Lagrange strain, parts 0-3 (P/A/S leaflets,
+  BiV wall), chordae rods 0.07 (97/84/65), septal-up atrial pose (`annulus_camera.py --ring-json` deck AnnularNodes
+  `--up-vec=-1,0,0`, checked for all three), previews rendered. Rod ends checked: leaflet ends on leaflet vertices,
+  tip ends at the deck PapillaryNodes at t 0 and at `pm_fixed_lowered.json` to_xyz from t 0.02 (5e-5 mm). Leaflet
+  pressure 3.06 kPa for OCS12 (run 06 deck), 5.666 kPa for OCS13/14. The OCS12 case uses the same old diseased wall,
+  so it shows the same annulus saw-teeth. 2026-11-17 (user request).
+
 ## Tried / set aside
 - Demo cases (`sphere_demo*`, `leaflet_frame40`) removed from the site on 2026-10-13; their synthetic
   input frames moved to `archive/test_data/` on 2026-10-16 (generator only in git history).
