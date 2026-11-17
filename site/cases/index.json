@@ -79,6 +79,26 @@
   "preview": true
  },
  {
+  "name": "clip_release_ocs14_damp1",
+  "title": "OCS14 clip release, springs + damper (furthest run)",
+  "description": "Run 44 w0.2_damp1 (standalone OCS14 valve + clip): pressurize, grasp, then from t 0.26 each clip body's zero-length spring to ground drops log-linearly from k 1e4 (factor 10 per 0.05 s) with a damper c 1 switched on. Clip drifts as one unit, no rotation: 0.13 mm at t 0.29, 1.0 mm at 0.33, 3.9 mm at 0.374. ERROR at t 0.377 (k about 46).",
+  "group": "Clip release (standalone OCS14)",
+  "nFrames": 40,
+  "nVerts": 10282,
+  "nTris": 19898,
+  "fields": [
+   "stress|vm",
+   "stress|trace",
+   "stress|p1",
+   "Lagrange_strain|vm",
+   "Lagrange_strain|trace",
+   "Lagrange_strain|p1"
+  ],
+  "encrypted": false,
+  "sizeMB": 15.0,
+  "preview": true
+ },
+ {
   "name": "echo_tv_D-02-S-03-b_t0032",
   "title": "Baseline chordae (t0032)",
   "description": "Patient tricuspid valve D-02-S-03-b reconstructed from echo. 49 chordae to 3 papillary points, ventricular pressure ramped smoothly to 20 mmHg over 0-0.05 s then held to 0.1 s.",
