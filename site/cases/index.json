@@ -44,7 +44,7 @@
   "description": "Run 01_clip_rv4mmHg: A1S2 clip, annulus tied to the 3 mm diseased wall, RV + trunk pressurized to 4 mmHg (t = 0.16\u20130.21 s).",
   "group": "Clip in RV",
   "nFrames": 40,
-  "nVerts": 23137,
+  "nVerts": 23144,
   "nTris": 45378,
   "fields": [
    "stress|vm",
@@ -64,7 +64,7 @@
   "description": "Run 03_septal_clip_rv4mmHg_midplane: valve rotated to ann_rz 140.7 deg (septal leaflet on the septum; clip_rv4mmHg uses 82 deg), A1S2 clip, annulus tied to the septal-aligned 3 mm diseased wall, roller plane at mid height, RV + trunk pressurized to 4 mmHg from t = 0.16 s. Run ends at t = 0.224 s.",
   "group": "Clip in RV",
   "nFrames": 40,
-  "nVerts": 23085,
+  "nVerts": 23092,
   "nTris": 45274,
   "fields": [
    "stress|vm",
@@ -206,6 +206,66 @@
   ],
   "encrypted": false,
   "sizeMB": 8.9,
+  "preview": true
+ },
+ {
+  "name": "pm_ocs12_lowered_fixed",
+  "title": "OCS12, PM tips lowered (fixed in space), RV 4 mmHg",
+  "description": "Run 54: run 06's deck (OCS12 valve, uniform Posterior card, tied to the 3 mm septal-aligned diseased wall). The 7 papillary tips are moved by prescribed displacement over t 0-0.02 s to the lowered positions of run 51 r3 (4.4-21.1 mm) and then held fixed. Leaflet pressure 3.06 kPa by t 0.02 s, RV + trunk 4 mmHg over 0.05-0.08 s, ends t 0.1 s (last written frame t 0.098). Max leaflet height above the annulus at t 0.1 (P/A/S): 1.4/0.9/0.2 mm.",
+  "group": "PMs on the RV endocardium (lowered tips, fixed in space)",
+  "nFrames": 40,
+  "nVerts": 21083,
+  "nTris": 41268,
+  "fields": [
+   "stress|vm",
+   "stress|trace",
+   "stress|p1",
+   "Lagrange_strain|vm",
+   "Lagrange_strain|trace",
+   "Lagrange_strain|p1"
+  ],
+  "encrypted": false,
+  "sizeMB": 30.9,
+  "preview": true
+ },
+ {
+  "name": "pm_ocs13_lowered_fixed",
+  "title": "OCS13, PM tips lowered (fixed in space), RV 4 mmHg",
+  "description": "Run 55: run 23's deck (OCS13 valve, OCS12 Posterior card on all leaflets, tied to the OCS13 3 mm wall). The 6 papillary tips are moved by prescribed displacement over t 0-0.02 s to the lowered positions of run 52 r3 (7.0-15.1 mm) and then held fixed. Leaflet pressure 5.666 kPa by t 0.02 s, RV + trunk 4 mmHg over 0.05-0.08 s, ends t 0.1 s. Max leaflet height above the annulus at t 0.1 (P/A/S): -0.6/3.4/1.5 mm.",
+  "group": "PMs on the RV endocardium (lowered tips, fixed in space)",
+  "nFrames": 40,
+  "nVerts": 17181,
+  "nTris": 33628,
+  "fields": [
+   "stress|vm",
+   "stress|trace",
+   "stress|p1",
+   "Lagrange_strain|vm",
+   "Lagrange_strain|trace",
+   "Lagrange_strain|p1"
+  ],
+  "encrypted": false,
+  "sizeMB": 25.1,
+  "preview": true
+ },
+ {
+  "name": "pm_ocs14_lowered_fixed",
+  "title": "OCS14, PM tips lowered (fixed in space), RV 4 mmHg",
+  "description": "Run 56: run 25's deck (OCS14 valve, OCS12 Posterior card on all leaflets, tied to the OCS14 3 mm wall). The 5 papillary tips are moved by prescribed displacement over t 0-0.02 s to the lowered positions of run 53 r1 (2.0-15.1 mm) and then held fixed. Leaflet pressure 5.666 kPa by t 0.02 s, RV + trunk 4 mmHg over 0.05-0.08 s, ends t 0.1 s. Max leaflet height above the annulus at t 0.1 (P/A/S): 1.0/2.5/1.7 mm.",
+  "group": "PMs on the RV endocardium (lowered tips, fixed in space)",
+  "nFrames": 40,
+  "nVerts": 13518,
+  "nTris": 26382,
+  "fields": [
+   "stress|vm",
+   "stress|trace",
+   "stress|p1",
+   "Lagrange_strain|vm",
+   "Lagrange_strain|trace",
+   "Lagrange_strain|p1"
+  ],
+  "encrypted": false,
+  "sizeMB": 19.8,
   "preview": true
  },
  {
