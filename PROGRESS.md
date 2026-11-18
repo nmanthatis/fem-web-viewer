@@ -124,6 +124,11 @@ FEBio runs use mm / kPa / mN / s / kg, so all stress fields are in kPa.
   tip ends at the deck PapillaryNodes at t 0 and at `pm_fixed_lowered.json` to_xyz from t 0.02 (5e-5 mm). Leaflet
   pressure 3.06 kPa for OCS12 (run 06 deck), 5.666 kPa for OCS13/14. The OCS12 case uses the same old diseased wall,
   so it shows the same annulus saw-teeth. 2026-11-17 (user request).
+- **PMs tied to the RV endocardium** › `pm_ocs13_patch_tie_r8` (run 59 r8, `biv_valve_pipeline/runs/59_ocs13_pmpatch_js/r8`):
+  run 23's deck with each tip tied to all wall nodes within 8 mm (cone weights, 22-29 nodes), tips not lowered.
+  Same recipe as the lowered-fixed cases (40 frames, stress + strain, parts 0-3, chordae rods 0.07); camera copied
+  from `pm_ocs13_lowered_fixed` (same mesh, septal-up). Rod tip ends checked against the FEBio tip positions at
+  t 0.1 (0 mm). 2026-11-18 (user request).
 
 ## Tried / set aside
 - Demo cases (`sphere_demo*`, `leaflet_frame40`) removed from the site on 2026-10-13; their synthetic
