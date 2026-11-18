@@ -327,5 +327,25 @@
   "encrypted": false,
   "sizeMB": 19.8,
   "preview": true
+ },
+ {
+  "name": "pm_ocs13_patch_tie_r8",
+  "title": "OCS13, PM tips tied to an 8 mm endocardium patch, RV 4 mmHg",
+  "description": "Run 59 r8: run 23's deck (OCS13 valve, OCS12 Posterior card on all leaflets, tied to the OCS13 3 mm wall). Each of the 6 papillary tips is tied to every RV endocardium/trunk node within 8 mm of its wall point (22-29 nodes, cone weights 1-d/R), so the tip moves with a weighted average of the wall patch. Tips not lowered. Leaflet pressure 5.666 kPa by t 0.02 s, RV + trunk 4 mmHg over 0.05-0.08 s, ends t 0.1 s. Max leaflet height above the annulus at t 0.1 (P/A/S): 5.5/14.5/4.5 mm (one-triangle tie, run 47: 6.2/15.3/5.1; lowered fixed tips, run 55: -0.6/3.4/1.5).",
+  "group": "PMs tied to the RV endocardium",
+  "nFrames": 40,
+  "nVerts": 17181,
+  "nTris": 33628,
+  "fields": [
+   "stress|vm",
+   "stress|trace",
+   "stress|p1",
+   "Lagrange_strain|vm",
+   "Lagrange_strain|trace",
+   "Lagrange_strain|p1"
+  ],
+  "encrypted": false,
+  "sizeMB": 25.1,
+  "preview": true
  }
 ]
