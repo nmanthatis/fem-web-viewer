@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import { TrackballControls } from 'three/addons/controls/TrackballControls.js';
-import { COLORMAPS, buildLUT, drawLegend, fmt } from './colormaps.js?v=20261120141423';
-import { decryptBundle, keyFromFragment } from './crypto.js?v=20261120141423';
+import { COLORMAPS, buildLUT, drawLegend, fmt } from './colormaps.js?v=20261120141923';
+import { decryptBundle, keyFromFragment } from './crypto.js?v=20261120141923';
 
 const $ = id => document.getElementById(id);
 const params = new URLSearchParams(location.search);

@@ -129,6 +129,29 @@ FEBio runs use mm / kPa / mN / s / kg, so all stress fields are in kPa.
   Same recipe as the lowered-fixed cases (40 frames, stress + strain, parts 0-3, chordae rods 0.07); camera copied
   from `pm_ocs13_lowered_fixed` (same mesh, septal-up). Rod tip ends checked against the FEBio tip positions at
   t 0.1 (0 mm). 2026-11-18 (user request).
+- **End diastole (4 → 5 mmHg)** › `diastolic_ocs12_run62`, `diastolic_ocs14_run62` (run 62, `biv_valve_pipeline/runs/
+  62_diastolic_fill/ocs1x`: hand-fit chordae, one spring curve; PM tips tied to the wall at their original positions, so
+  they move with it, up to 4.4 / 2.9 mm) and `diastolic_ocs13_run64`, `diastolic_ocs14_run64` (run 64,
+  `runs/64_realchordae_fixedpm_diastolic_js/ocs1x`: real per-region Ogden chordae with trunk slack, PM tips fixed at
+  their deck positions, Strategy 1 wall). Protocol: leaflet + RV + trunk 0 → 4 mmHg by t 0.03, hold to 0.07, 5 mmHg by
+  0.09, hold to 0.13. 51 frames -> 40, t 0-0.13. Same recipe as runs 54-56: stress + Lagrange strain, parts 0-3,
+  `--lines Chordae --line-radius 0.07` (97/65/84/65 rods; run 64's per-chord parts 4-87 all come through as rods),
+  septal-up atrial pose (`annulus_camera.py --ring-json` deck AnnularNodes `--up-vec=-1,0,0`; cameras identical to
+  runs 54-56), previews rendered, public. 30.9 / 19.8 / 25.1 / 19.8 MB. Run 62 OCS13 and run 64 OCS12 ended in ERROR
+  and are not published. The OCS12 case shows the old diseased wall's annulus saw-teeth. Published in commit 8be6e21
+  (its Pages deploy failed twice at deploy-pages "no artifact named github-pages" after a successful 364 MB upload;
+  went live with the next publish). 2026-11-20 (user request).
+- **Solver comparison (standalone OCS12)** › `ocs12_febio_vs_abaqus` ("OCS12 diseased: FEBio (left) vs Abaqus (right),
+  PM pull then 5.666 kPa"): one case holding both meshes. FEBio = `biv_valve_pipeline/tests/chordae_slack_calibration/
+  variants/r5_annulus_afterpm` (51 frames, t 0-0.07, 97 chord springs as rods); Abaqus =
+  `.../rounds/abaqus_ocs12_vtk/abaqus.0-41.vtk` (same nodes and leaflet quads, 4542 truss segments as rods), times
+  mapped to the FEBio clock with `abaqus_febio_time.vtk.series`, shifted +71.7 mm in x (1.3 x valve width). Both
+  displacement series resampled linearly onto 51 frames (dt 0.0014) and merged per frame by
+  `scratch/merge_ocs12_febio_abaqus.py` into `scratch/ocs12_febio_vs_abaqus/merged.pvd` (not committed), then
+  `export_case.py merged.pvd --fields displacement --parts 0-5 (FEBio/Abaqus P/A/S) --lines Chordae --line-radius 0.07
+  --frames 51`. Displacement only (Abaqus has no leaflet stress). Camera: `annulus_camera.py --ring-json` (both
+  annulus copies) `--up y`, atrial view, FEBio left. End-state median leaflet distance 0.86 / 1.04 / 0.89 mm (P/A/S),
+  sides 26.5 mm apart at the end. 27.7 MB. 2026-11-20 (user request).
 
 ## Tried / set aside
 - Demo cases (`sphere_demo*`, `leaflet_frame40`) removed from the site on 2026-10-13; their synthetic

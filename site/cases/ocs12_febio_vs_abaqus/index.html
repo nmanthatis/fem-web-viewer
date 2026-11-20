@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>OCS12 diseased: FEBio (left) vs Abaqus (right), PM pull then 5.666 kPa – FEM Viewer</title>
+<meta name="description" content="Standalone OCS12 diseased valve, two solvers on one clock (t 0-0.07; Abaqus times mapped with abaqus_febio_time.vtk.series): PM pull 0-0.02, pressure ramp to 5.666 kPa plus annulus motion 0.02-0.04, hold 0.04-0.07. Left: FEBio, pins/valve_ocs12_abaqus_equiv in biv_valve_pipeline (variant r5_annulus_afterpm): round-5 calibrated chordae (97 springs), annulus following the Abaqus path. Right: Abaqus with its truss chordae, shifted 71.7 mm along x. The two apply the annulus motion in a different order (Abaqus moves the annulus partly during the PM pull, FEBio holds it during the pull and applies the whole motion with the pressure), so they coincide only at the end state. At the end, median leaflet distance to Abaqus is 0.86 / 1.04 / 0.89 mm (Posterior / Anterior / Septal). Field: displacement only (the Abaqus frames carry no leaflet stress).">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="FEM Viewer">
+<meta property="og:title" content="OCS12 diseased: FEBio (left) vs Abaqus (right), PM pull then 5.666 kPa">
+<meta property="og:description" content="Standalone OCS12 diseased valve, two solvers on one clock (t 0-0.07; Abaqus times mapped with abaqus_febio_time.vtk.series): PM pull 0-0.02, pressure ramp to 5.666 kPa plus annulus motion 0.02-0.04, hold 0.04-0.07. Left: FEBio, pins/valve_ocs12_abaqus_equiv in biv_valve_pipeline (variant r5_annulus_afterpm): round-5 calibrated chordae (97 springs), annulus following the Abaqus path. Right: Abaqus with its truss chordae, shifted 71.7 mm along x. The two apply the annulus motion in a different order (Abaqus moves the annulus partly during the PM pull, FEBio holds it during the pull and applies the whole motion with the pressure), so they coincide only at the end state. At the end, median leaflet distance to Abaqus is 0.86 / 1.04 / 0.89 mm (Posterior / Anterior / Septal). Field: displacement only (the Abaqus frames carry no leaflet stress).">
+<meta property="og:url" content="https://nmanthatis.github.io/fem-web-viewer/cases/ocs12_febio_vs_abaqus/">
+<meta property="og:image" content="https://nmanthatis.github.io/fem-web-viewer/cases/ocs12_febio_vs_abaqus/preview.jpg">
+<meta property="og:image:type" content="image/jpeg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="675">
+<meta property="og:video" content="https://nmanthatis.github.io/fem-web-viewer/cases/ocs12_febio_vs_abaqus/preview.mp4">
+<meta property="og:video:secure_url" content="https://nmanthatis.github.io/fem-web-viewer/cases/ocs12_febio_vs_abaqus/preview.mp4">
+<meta property="og:video:type" content="video/mp4">
+<meta property="og:video:width" content="800">
+<meta property="og:video:height" content="450">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="OCS12 diseased: FEBio (left) vs Abaqus (right), PM pull then 5.666 kPa">
+<meta name="twitter:description" content="Standalone OCS12 diseased valve, two solvers on one clock (t 0-0.07; Abaqus times mapped with abaqus_febio_time.vtk.series): PM pull 0-0.02, pressure ramp to 5.666 kPa plus annulus motion 0.02-0.04, hold 0.04-0.07. Left: FEBio, pins/valve_ocs12_abaqus_equiv in biv_valve_pipeline (variant r5_annulus_afterpm): round-5 calibrated chordae (97 springs), annulus following the Abaqus path. Right: Abaqus with its truss chordae, shifted 71.7 mm along x. The two apply the annulus motion in a different order (Abaqus moves the annulus partly during the PM pull, FEBio holds it during the pull and applies the whole motion with the pressure), so they coincide only at the end state. At the end, median leaflet distance to Abaqus is 0.86 / 1.04 / 0.89 mm (Posterior / Anterior / Septal). Field: displacement only (the Abaqus frames carry no leaflet stress).">
+<meta name="twitter:image" content="https://nmanthatis.github.io/fem-web-viewer/cases/ocs12_febio_vs_abaqus/preview.jpg">
+<script>
+  // Forward into the viewer, keeping any ?field=...&frame=... options and the #k=CODE fragment.
+  var q = location.search ? '&' + location.search.slice(1) : '';
+  location.replace('../../viewer.html?case=ocs12_febio_vs_abaqus' + q + location.hash);
+</script>
+<style>body{font-family:system-ui,sans-serif;background:#1b1e26;color:#e6e8ee;margin:0;padding:24px;text-align:center}img{max-width:100%;border-radius:8px}a{color:#5aa9ff}</style>
+</head>
+<body>
+<h1>OCS12 diseased: FEBio (left) vs Abaqus (right), PM pull then 5.666 kPa</h1>
+<p><a href="../../viewer.html?case=ocs12_febio_vs_abaqus">Open the interactive viewer</a></p>
+<img src="preview.gif" alt="OCS12 diseased: FEBio (left) vs Abaqus (right), PM pull then 5.666 kPa animation">
+</body>
+</html>
