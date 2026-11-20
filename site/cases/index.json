@@ -209,6 +209,86 @@
   "preview": true
  },
  {
+  "name": "diastolic_ocs12_run62",
+  "title": "OCS12, run 62, hand-fit chordae, 4 \u2192 5 mmHg, end diastole",
+  "description": "Run 62: OCS12 valve (uniform Posterior card) tied to the 3 mm septal-aligned diseased wall; hand-fit chordae (one spring curve, 97 chords); PM tips tied to the wall at their original positions (they move with the wall, up to 4.4 mm by t 0.13). Leaflet, RV endocardium and trunk pressure on one smooth-step curve: 0 \u2192 4 mmHg by t 0.03, held to 0.07, then 5 mmHg by 0.09, held to 0.13 (end diastole). Max leaflet height above the annulus (P/A/S): 2.1/2.8/0.6 mm at 4 mmHg (t 0.07), 2.3/5.8/0.4 mm at t 0.13.",
+  "group": "End diastole (4 \u2192 5 mmHg)",
+  "nFrames": 40,
+  "nVerts": 21083,
+  "nTris": 41268,
+  "fields": [
+   "stress|vm",
+   "stress|trace",
+   "stress|p1",
+   "Lagrange_strain|vm",
+   "Lagrange_strain|trace",
+   "Lagrange_strain|p1"
+  ],
+  "encrypted": false,
+  "sizeMB": 30.9,
+  "preview": true
+ },
+ {
+  "name": "diastolic_ocs13_run64",
+  "title": "OCS13, run 64, real Ogden chordae, 4 \u2192 5 mmHg, end diastole",
+  "description": "Run 64 (john-snow): run 55's deck (OCS13 valve, OCS12 Posterior card on all leaflets, OCS13 3 mm wall, Strategy 1 wall material) with real per-region chordae: one nonlinear spring per chord (84) with the 3-term Ogden law and area of its Abaqus region, trunk-tortuosity slack. PM tips fixed in space at their deck positions (not lowered). Leaflet, RV endocardium and trunk pressure on one smooth-step curve: 0 \u2192 4 mmHg by t 0.03, held to 0.07, then 5 mmHg by 0.09, held to 0.13 (end diastole). Max leaflet height above the annulus (P/A/S): 0.8/2.0/0.6 mm at 4 mmHg (t 0.07), 0.7/2.0/0.6 mm at t 0.13.",
+  "group": "End diastole (4 \u2192 5 mmHg)",
+  "nFrames": 40,
+  "nVerts": 17181,
+  "nTris": 33628,
+  "fields": [
+   "stress|vm",
+   "stress|trace",
+   "stress|p1",
+   "Lagrange_strain|vm",
+   "Lagrange_strain|trace",
+   "Lagrange_strain|p1"
+  ],
+  "encrypted": false,
+  "sizeMB": 25.1,
+  "preview": true
+ },
+ {
+  "name": "diastolic_ocs14_run62",
+  "title": "OCS14, run 62, hand-fit chordae, 4 \u2192 5 mmHg, end diastole",
+  "description": "Run 62: OCS14 valve (OCS12 Posterior card on all leaflets) tied to the OCS14 3 mm wall; hand-fit chordae (one spring curve, 65 chords); PM tips tied to the wall at their original positions (they move with the wall, up to 2.9 mm by t 0.13). Leaflet, RV endocardium and trunk pressure on one smooth-step curve: 0 \u2192 4 mmHg by t 0.03, held to 0.07, then 5 mmHg by 0.09, held to 0.13 (end diastole). Max leaflet height above the annulus (P/A/S): 2.0/3.0/1.9 mm at 4 mmHg (t 0.07), 2.1/3.3/1.9 mm at t 0.13.",
+  "group": "End diastole (4 \u2192 5 mmHg)",
+  "nFrames": 40,
+  "nVerts": 13518,
+  "nTris": 26382,
+  "fields": [
+   "stress|vm",
+   "stress|trace",
+   "stress|p1",
+   "Lagrange_strain|vm",
+   "Lagrange_strain|trace",
+   "Lagrange_strain|p1"
+  ],
+  "encrypted": false,
+  "sizeMB": 19.8,
+  "preview": true
+ },
+ {
+  "name": "diastolic_ocs14_run64",
+  "title": "OCS14, run 64, real Ogden chordae, 4 \u2192 5 mmHg, end diastole",
+  "description": "Run 64 (john-snow): run 56's deck (OCS14 valve, OCS12 Posterior card on all leaflets, OCS14 3 mm wall, Strategy 1 wall material) with real per-region chordae: one nonlinear spring per chord (65) with the 3-term Ogden law and area of its Abaqus region, trunk-tortuosity slack. PM tips fixed in space at their deck positions (not lowered). Leaflet, RV endocardium and trunk pressure on one smooth-step curve: 0 \u2192 4 mmHg by t 0.03, held to 0.07, then 5 mmHg by 0.09, held to 0.13 (end diastole). Max leaflet height above the annulus (P/A/S): 1.5/3.1/1.2 mm at 4 mmHg (t 0.07), 1.5/4.8/1.1 mm at t 0.13.",
+  "group": "End diastole (4 \u2192 5 mmHg)",
+  "nFrames": 40,
+  "nVerts": 13518,
+  "nTris": 26382,
+  "fields": [
+   "stress|vm",
+   "stress|trace",
+   "stress|p1",
+   "Lagrange_strain|vm",
+   "Lagrange_strain|trace",
+   "Lagrange_strain|p1"
+  ],
+  "encrypted": false,
+  "sizeMB": 19.8,
+  "preview": true
+ },
+ {
   "name": "pm_ocs12_lowered_fixed",
   "title": "OCS12, PM tips lowered (fixed in space), RV 4 mmHg",
   "description": "Run 54: run 06's deck (OCS12 valve, uniform Posterior card, tied to the 3 mm septal-aligned diseased wall). The 7 papillary tips are moved by prescribed displacement over t 0-0.02 s to the lowered positions of run 51 r3 (4.4-21.1 mm) and then held fixed. Leaflet pressure 3.06 kPa by t 0.02 s, RV + trunk 4 mmHg over 0.05-0.08 s, ends t 0.1 s (last written frame t 0.098). Max leaflet height above the annulus at t 0.1 (P/A/S): 1.4/0.9/0.2 mm.",
