@@ -431,16 +431,18 @@
  {
   "name": "ocs12_febio_vs_abaqus",
   "title": "OCS12 diseased: FEBio (left) vs Abaqus (right), PM pull then 5.666 kPa",
-  "description": "Standalone OCS12 diseased valve, two solvers on one clock (t 0-0.07; Abaqus times mapped with abaqus_febio_time.vtk.series): PM pull 0-0.02, pressure ramp to 5.666 kPa plus annulus motion 0.02-0.04, hold 0.04-0.07. Left: FEBio, pins/valve_ocs12_abaqus_equiv in biv_valve_pipeline (variant r5_annulus_afterpm): round-5 calibrated chordae (97 springs), annulus following the Abaqus path. Right: Abaqus with its truss chordae, shifted 71.7 mm along x. The two apply the annulus motion in a different order (Abaqus moves the annulus partly during the PM pull, FEBio holds it during the pull and applies the whole motion with the pressure), so they coincide only at the end state. At the end, median leaflet distance to Abaqus is 0.86 / 1.04 / 0.89 mm (Posterior / Anterior / Septal). Field: displacement only (the Abaqus frames carry no leaflet stress).",
+  "description": "Standalone OCS12 diseased valve, two solvers on one clock (t 0-0.07; Abaqus times mapped with abaqus_febio_time.vtk.series): PM pull 0-0.02, pressure ramp to 5.666 kPa plus annulus motion 0.02-0.04, hold 0.04-0.07. Left: FEBio, pins/valve_ocs12_abaqus_equiv in biv_valve_pipeline (variant r5_annulus_afterpm): round-5 calibrated chordae (97 springs), annulus following the Abaqus path. Right: Abaqus with its truss chordae, shifted 71.7 mm along x. The two apply the annulus motion in a different order (Abaqus moves the annulus partly during the PM pull, FEBio holds it during the pull and applies the whole motion with the pressure), so they coincide only at the end state. At the end, median leaflet distance to Abaqus is 0.86 / 1.04 / 0.89 mm (Posterior / Anterior / Septal). Stress: FEBio VTK stress vs Abaqus membrane stress (mean of top/bottom surface); end-state von Mises median P/A/S 83/73/59 kPa (FEBio) vs 95/85/76 kPa (Abaqus).",
   "group": "Solver comparison (standalone OCS12)",
   "nFrames": 51,
   "nVerts": 33023,
   "nTris": 58916,
   "fields": [
-   "displacement|mag"
+   "displacement|mag",
+   "stress|vm",
+   "stress|p1"
   ],
   "encrypted": false,
-  "sizeMB": 27.7,
+  "sizeMB": 41.2,
   "preview": true
  }
 ]
