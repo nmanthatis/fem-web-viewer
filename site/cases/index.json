@@ -306,6 +306,23 @@
   "preview": true
  },
  {
+  "name": "biv_isovolumic_caps_A",
+  "title": "BiV isovolumic contraction, Posterior caps (A)",
+  "description": "Fill to 4 mmHg on RV + trunk + caps, then pressure 4 to 40 mmHg with the active stress T0 that holds the RV + trunk volume (found by iteration). Valve replaced by flat shell caps, default Posterior Lee-Sacks card. T0 in RV free wall + septum only.",
+  "group": "Isovolumic contraction (BiV, caps)",
+  "nFrames": 65,
+  "nVerts": 8105,
+  "nTris": 16591,
+  "fields": [
+   "stress|vm",
+   "stress|trace",
+   "stress|p1"
+  ],
+  "encrypted": false,
+  "sizeMB": 12.8,
+  "preview": true
+ },
+ {
   "name": "pm_ocs12_lowered_fixed",
   "title": "OCS12, PM tips lowered (fixed in space), RV 4 mmHg",
   "description": "Run 54: run 06's deck (OCS12 valve, uniform Posterior card, tied to the 3 mm septal-aligned diseased wall). The 7 papillary tips are moved by prescribed displacement over t 0-0.02 s to the lowered positions of run 51 r3 (4.4-21.1 mm) and then held fixed. Leaflet pressure 3.06 kPa by t 0.02 s, RV + trunk 4 mmHg over 0.05-0.08 s, ends t 0.1 s (last written frame t 0.098). Max leaflet height above the annulus at t 0.1 (P/A/S): 1.4/0.9/0.2 mm.",
