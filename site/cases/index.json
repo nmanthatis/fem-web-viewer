@@ -289,6 +289,23 @@
   "preview": true
  },
  {
+  "name": "biv_isovolumic_caps_C",
+  "title": "BiV isovolumic contraction, caps + zero-slack chordae (C)",
+  "description": "As A (Posterior caps), plus 97 OCS12 chords with their own Ogden law and no slack, from the annulus cap to the PM tips on the moving wall. Fill to 4 mmHg, then 4 to 40 mmHg with the T0 that holds the RV + trunk volume.",
+  "group": "Isovolumic contraction (BiV, caps)",
+  "nFrames": 65,
+  "nVerts": 8105,
+  "nTris": 16591,
+  "fields": [
+   "stress|vm",
+   "stress|trace",
+   "stress|p1"
+  ],
+  "encrypted": false,
+  "sizeMB": 12.8,
+  "preview": true
+ },
+ {
   "name": "biv_isovolumic_caps_B",
   "title": "BiV isovolumic contraction, caps x10 (B)",
   "description": "Fill to 4 mmHg on RV + trunk + caps, then pressure 4 to 40 mmHg with the active stress T0 that holds the RV + trunk volume (found by iteration). Valve replaced by flat shell caps, card x10. T0 in RV free wall + septum only.",
