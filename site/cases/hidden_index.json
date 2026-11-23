@@ -1,0 +1,70 @@
+[
+ {
+  "name": "biv_isovolumic_caps_C",
+  "title": "BiV isovolumic contraction, caps + zero-slack chordae (C)",
+  "description": "As A (Posterior caps), plus 97 OCS12 chords with their own Ogden law and no slack, from the annulus cap to the PM tips on the moving wall. Fill to 4 mmHg, then 4 to 40 mmHg with the T0 that holds the RV + trunk volume.",
+  "group": "Isovolumic contraction (BiV, caps)",
+  "nFrames": 65,
+  "nVerts": 8105,
+  "nTris": 16591,
+  "fields": [
+   "stress|vm",
+   "stress|trace",
+   "stress|p1"
+  ],
+  "encrypted": false,
+  "sizeMB": 12.8,
+  "preview": true
+ },
+ {
+  "name": "biv_isovolumic_caps_B",
+  "title": "BiV isovolumic contraction, caps x10 (B)",
+  "description": "Fill to 4 mmHg on RV + trunk + caps, then pressure 4 to 40 mmHg with the active stress T0 that holds the RV + trunk volume (found by iteration). Valve replaced by flat shell caps, card x10. T0 in RV free wall + septum only.",
+  "group": "Isovolumic contraction (BiV, caps)",
+  "nFrames": 65,
+  "nVerts": 8105,
+  "nTris": 16591,
+  "fields": [
+   "stress|vm",
+   "stress|trace",
+   "stress|p1"
+  ],
+  "encrypted": false,
+  "sizeMB": 12.8,
+  "preview": true
+ },
+ {
+  "name": "biv_isovolumic_caps_C2f",
+  "title": "BiV isovolumic contraction, chordae spread over the cap (C2f)",
+  "description": "Posterior caps plus 97 zero-slack OCS12 chords from the PM tips to points spread over the tricuspid cap (closed-valve mapping; each chord shared over neighbouring cap nodes, 681 rods). Outflow wall passive. Fill to 4 mmHg, then FEBio's volume constraint holds the RV + outflow volume while the active stress T0 ramps until the cavity reaches 40 mmHg (frame 25 onward). T0 195 kPa at 40 mmHg.",
+  "group": "Isovolumic contraction (BiV, caps)",
+  "nFrames": 49,
+  "nVerts": 8105,
+  "nTris": 16591,
+  "fields": [
+   "stress|vm",
+   "stress|trace",
+   "stress|p1"
+  ],
+  "encrypted": false,
+  "sizeMB": 9.7,
+  "preview": true
+ },
+ {
+  "name": "biv_isovolumic_caps_A",
+  "title": "BiV isovolumic contraction, Posterior caps (A)",
+  "description": "Fill to 4 mmHg on RV + trunk + caps, then pressure 4 to 40 mmHg with the active stress T0 that holds the RV + trunk volume (found by iteration). Valve replaced by flat shell caps, default Posterior Lee-Sacks card. T0 in RV free wall + septum only.",
+  "group": "Isovolumic contraction (BiV, caps)",
+  "nFrames": 65,
+  "nVerts": 8105,
+  "nTris": 16591,
+  "fields": [
+   "stress|vm",
+   "stress|trace",
+   "stress|p1"
+  ],
+  "encrypted": false,
+  "sizeMB": 12.8,
+  "preview": true
+ }
+]
