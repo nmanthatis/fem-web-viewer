@@ -289,6 +289,40 @@
   "preview": true
  },
  {
+  "name": "biv_isovolumic_caps_C2ft_LV8",
+  "title": "BiV isovolumic contraction, chordae + fully active outflow wall + LV 8 mmHg (C2ft)",
+  "description": "Posterior caps plus 97 zero-slack OCS12 chords spread over the tricuspid cap (681 rods). LV pressurised to 8 mmHg (passive wall), ramped with the fill and held. Fill RV to 4 mmHg, then FEBio's volume constraint holds the RV + outflow volume while T0 ramps until the cavity reaches 40 mmHg (frame 25 onward). Outflow-tract wall contracts with the same T0 as the RV free wall. T0 89 kPa at 40 mmHg.",
+  "group": "Isovolumic contraction (BiV, caps)",
+  "nFrames": 49,
+  "nVerts": 8105,
+  "nTris": 16591,
+  "fields": [
+   "stress|vm",
+   "stress|trace",
+   "stress|p1"
+  ],
+  "encrypted": false,
+  "sizeMB": 9.7,
+  "preview": true
+ },
+ {
+  "name": "biv_isovolumic_caps_C2fg_LV8",
+  "title": "BiV isovolumic contraction, chordae + graded outflow wall + LV 8 mmHg (C2fg)",
+  "description": "Posterior caps plus 97 zero-slack OCS12 chords spread over the tricuspid cap (681 rods). LV pressurised to 8 mmHg (passive wall), ramped with the fill and held. Fill RV to 4 mmHg, then FEBio's volume constraint holds the RV + outflow volume while T0 ramps until the cavity reaches 40 mmHg (frame 25 onward). Outflow-tract wall contracts with T0 x 1.0 at the RV border falling to x 0.5 at the pulmonary valve. T0 94 kPa at 40 mmHg.",
+  "group": "Isovolumic contraction (BiV, caps)",
+  "nFrames": 49,
+  "nVerts": 8105,
+  "nTris": 16591,
+  "fields": [
+   "stress|vm",
+   "stress|trace",
+   "stress|p1"
+  ],
+  "encrypted": false,
+  "sizeMB": 9.7,
+  "preview": true
+ },
+ {
   "name": "biv_isovolumic_caps_At",
   "title": "BiV isovolumic contraction, fully active outflow wall (At)",
   "description": "Posterior caps. The RV outflow-tract wall contracts with the same T0 as the RV free wall. Fill to 4 mmHg, then FEBio's volume constraint holds the RV + outflow volume while the active stress T0 ramps until the cavity reaches 40 mmHg (frame 25 onward). T0 98 kPa at 40 mmHg (passive outflow wall: 203).",
@@ -323,39 +357,9 @@
   "preview": true
  },
  {
-  "name": "biv_isovolumic_caps_C2ft_LV8",
-  "title": "BiV isovolumic contraction, spread chordae + fully active outflow wall, LV 8 mmHg (C2ft_LV8)",
-  "description": "Posterior caps plus 97 zero-slack OCS12 chords from the PM tips to points spread over the tricuspid cap (681 rods). The RV outflow-tract wall contracts with the same T0 as the RV free wall; 8 mmHg in the LV (ramped with the fill, constant afterwards; LV wall passive). Fill to 4 mmHg (frames 0-24), then FEBio's volume constraint holds the RV + outflow volume while the active stress T0 ramps to 203 kPa (frames 24-48). Displacement only, no stress (the stress rerun is not finished). The cavity passes 40 mmHg near frame 35 (T0 89 kPa at 40 mmHg; graded outflow wall C2fg_LV8: 94) and ends at 79 mmHg. Volume held within 0.04 %.",
-  "group": "Isovolumic contraction (BiV, caps)",
-  "nFrames": 49,
-  "nVerts": 8105,
-  "nTris": 16591,
-  "fields": [
-   "displacement|mag"
-  ],
-  "encrypted": false,
-  "sizeMB": 6.6,
-  "preview": true
- },
- {
   "name": "biv_isovolumic_caps_C2fg",
   "title": "BiV isovolumic contraction, spread chordae + graded active outflow wall (C2fg)",
   "description": "Posterior caps plus 97 zero-slack OCS12 chords from the PM tips to points spread over the tricuspid cap (681 rods). The RV outflow-tract wall contracts with T0 x 1.0 at the RV border falling to x 0.5 at the pulmonary valve (6 bands). This is the T0-pressure curve chosen for the valve runs. Fill to 4 mmHg (frames 0-24), then FEBio's volume constraint holds the RV + outflow volume while the active stress T0 ramps to 203 kPa (frames 24-48). Displacement only, no stress (the stress rerun is not finished). The cavity passes 40 mmHg near frame 35 (T0 94 kPa at 40 mmHg; Ag without chordae: 104) and ends at 74 mmHg. Volume held within 0.04 %.",
-  "group": "Isovolumic contraction (BiV, caps)",
-  "nFrames": 49,
-  "nVerts": 8105,
-  "nTris": 16591,
-  "fields": [
-   "displacement|mag"
-  ],
-  "encrypted": false,
-  "sizeMB": 6.6,
-  "preview": true
- },
- {
-  "name": "biv_isovolumic_caps_C2fg_LV8",
-  "title": "BiV isovolumic contraction, spread chordae + graded active outflow wall, LV 8 mmHg (C2fg_LV8)",
-  "description": "As C2fg, with 8 mmHg in the LV (ramped with the fill, constant afterwards; LV wall passive). Posterior caps plus 97 zero-slack OCS12 chords from the PM tips to points spread over the tricuspid cap (681 rods). Outflow-tract wall T0 x 1.0 at the RV border falling to x 0.5 at the pulmonary valve (6 bands). Fill to 4 mmHg (frames 0-24), then FEBio's volume constraint holds the RV + outflow volume while the active stress T0 ramps to 203 kPa (frames 24-48). Displacement only, no stress (the stress rerun is not finished). The cavity passes 40 mmHg near frame 35 (T0 94.4 kPa at 40 mmHg; 93.8 with the LV empty) and ends at 74 mmHg. Volume held within 0.04 %.",
   "group": "Isovolumic contraction (BiV, caps)",
   "nFrames": 49,
   "nVerts": 8105,
