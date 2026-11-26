@@ -59,6 +59,27 @@
   "preview": true
  },
  {
+  "name": "biv_ocs13L_clip_run83",
+  "title": "OCS13 valve clipped in the contracting BiV, run 83 (grasp, release to 4 mmHg, close, repressurize to ~25 mmHg)",
+  "description": "",
+  "group": "Clip in RV",
+  "nFrames": 52,
+  "nVerts": 19317,
+  "nTris": 37890,
+  "fields": [
+   "displacement|mag",
+   "stress|vm",
+   "stress|trace",
+   "stress|p1",
+   "Lagrange_strain|vm",
+   "Lagrange_strain|trace",
+   "Lagrange_strain|p1"
+  ],
+  "encrypted": false,
+  "sizeMB": 40.6,
+  "preview": true
+ },
+ {
   "name": "septal_clip_rv4mmHg_midplane",
   "title": "Septal-aligned valve + clip in BiV, RV 4 mmHg",
   "description": "Run 03_septal_clip_rv4mmHg_midplane: valve rotated to ann_rz 140.7 deg (septal leaflet on the septum; clip_rv4mmHg uses 82 deg), A1S2 clip, annulus tied to the septal-aligned 3 mm diseased wall, roller plane at mid height, RV + trunk pressurized to 4 mmHg from t = 0.16 s. Run ends at t = 0.224 s.",
