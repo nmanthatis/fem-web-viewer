@@ -39,6 +39,27 @@
   "preview": true
  },
  {
+  "name": "biv_ocs13L_clip_run83",
+  "title": "Clip in the contracting BiV (run 83)",
+  "description": "Run 83 (john-snow, ERROR TERMINATION at t 0.1766, 26.4 mmHg, negative jacobians; frames shown to t 0.1733). Run 79 (OCS13 valve in the layered BiV wall, PM heads, 84 Ogden chordae) with the u1 clip: fill 0 -> 4 mmHg by t 0.03, hold, ramp with T0 = C2ft curve(P) exactly as run 79 to 11.7 mmHg at t 0.0714, clip arms opening to 70 deg over t 0-0.02 with no clip contact. Then sticky contact on (posterior arm -> anterior leaflet, septal arm -> septal leaflet; penalty ramp t 0.0714-0.0814), release to 4 mmHg (t 0.0814-0.0964, T0 follows), arms close (t 0.0994-0.1094), repressurize + contract 4 -> 40 mmHg from t 0.1144. The clip is prescribed: it follows the rigid motion of the grasped leaflet region in run 79 (by time to t 0.0714, then by pressure on run 79's ramp). 47 frames evenly spaced in time (interpolated from the solver frames). Single anterior-leaflet elements spike to 1e14-1e21 kPa in two frames near t 0.14-0.15; default range 0-500 kPa. Stress in kPa.",
+  "group": "Clip in RV",
+  "nFrames": 47,
+  "nVerts": 19317,
+  "nTris": 37890,
+  "fields": [
+   "displacement|mag",
+   "stress|vm",
+   "stress|trace",
+   "stress|p1",
+   "Lagrange_strain|vm",
+   "Lagrange_strain|trace",
+   "Lagrange_strain|p1"
+  ],
+  "encrypted": false,
+  "sizeMB": 36.8,
+  "preview": true
+ },
+ {
   "name": "clip_rv4mmHg",
   "title": "Diseased valve + clip in BiV, RV 4 mmHg",
   "description": "Run 01_clip_rv4mmHg: A1S2 clip, annulus tied to the 3 mm diseased wall, RV + trunk pressurized to 4 mmHg (t = 0.16\u20130.21 s).",
@@ -56,27 +77,6 @@
   ],
   "encrypted": false,
   "sizeMB": 33.9,
-  "preview": true
- },
- {
-  "name": "biv_ocs13L_clip_run83",
-  "title": "OCS13 valve clipped in the contracting BiV, run 83 (grasp, release to 4 mmHg, close, repressurize to ~25 mmHg)",
-  "description": "",
-  "group": "Clip in RV",
-  "nFrames": 52,
-  "nVerts": 19317,
-  "nTris": 37890,
-  "fields": [
-   "displacement|mag",
-   "stress|vm",
-   "stress|trace",
-   "stress|p1",
-   "Lagrange_strain|vm",
-   "Lagrange_strain|trace",
-   "Lagrange_strain|p1"
-  ],
-  "encrypted": false,
-  "sizeMB": 40.6,
   "preview": true
  },
  {
